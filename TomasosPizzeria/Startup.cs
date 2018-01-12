@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TomasosPizzeria.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace TomasosPizzeria
 {
@@ -15,12 +16,15 @@ namespace TomasosPizzeria
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration configuration) => Configuration = configuration;
+
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IMatrattRepository, EFMatrattRepository>();
             services.AddMvc();
-            var connection = @"Server=KALLESIDEAPAD;Database=Tomasos;Trusted_Connection=True; ConnectRetryCount=0";
-            services.AddDbContext<TomasosContext>(options => options.UseSqlServer(connection));
-
+            services.AddDbContext<TomasosContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeria:ConnectionString"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
