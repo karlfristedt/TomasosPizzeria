@@ -16,7 +16,7 @@ namespace TomasosPizzeria.Controllers
         public IActionResult OrderDish(int id)
         {
             var selecteddish = repository.GetMatratter().SingleOrDefault(m => m.MatrattId == id);
-            var customer = repository.GetCustomers().SingleOrDefault(c => c.KundId);
+            //var customer = repository.GetCustomers().SingleOrDefault(c => c.KundId);
 
 
 
