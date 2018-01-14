@@ -1,0 +1,11 @@
+﻿
+@model IEnumerable<TomasosPizzeria.Models.Matratt>
+
+@foreach (var p in Model)
+{
+    <div>
+        <h3>@p.MatrattNamn</h3>
+        @p.Beskrivning
+        <h4>@p.Pris.ToString("c")</h4>
+    </div>
+}
