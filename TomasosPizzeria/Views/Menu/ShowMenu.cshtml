@@ -1,11 +1,34 @@
 ﻿
 @model IEnumerable<TomasosPizzeria.Models.Matratt>
 
-@foreach (var p in Model)
-{
-    <div>
-        <h3>@p.MatrattNamn</h3>
-        @p.Beskrivning
-        <h4>@p.Pris.ToString("c")</h4>
-    </div>
-}
+
+<table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Maträtt</th>
+                <th>Beskrivning</th>
+                <th>Ingredienser</th>
+                <th>Pris</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+            <tr>
+                <td>@p.MatrattNamn</td>
+                <td>@p.Beskrivning</td>
+                <td>
+                    @foreach (var prod in p.MatrattProdukt)
+                    {
+                        @prod.Produkt.ProduktNamn
+                    }
+                </td>
+                <td>@p.Pris</td>
+                <td><a asp-action="OrderDish" asp-controller="Order" asp-route-id=@p.MatrattId >Beställ</a></td>
+            </tr>
+            }
+        </tbody>
+</table>
+
+  

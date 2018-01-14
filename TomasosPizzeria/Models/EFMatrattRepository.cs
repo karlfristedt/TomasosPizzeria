@@ -11,7 +11,14 @@ namespace TomasosPizzeria.Models
 
         public EFMatrattRepository(TomasosContext ctx) { context = ctx; }
 
-        public IQueryable<Matratt> Matratter => context.Matratt;
+        public IQueryable<Matratt> GetMatratter()
+        {
+            return context.Matratt;
+        }
 
+        public IQueryable<Kund> GetCustomers()
+        {
+            return context.Kund;
+        }
     }
 }

@@ -7,6 +7,9 @@ namespace TomasosPizzeria.Models
 {
     public interface IMatrattRepository
     {
-        IQueryable<Matratt> Matratter { get; }
+        IQueryable<Matratt> GetMatratter();
+        IQueryable<Kund> GetCustomers();
+        //IQueryable<Produkt> Produkter { get; }
+        //IQueryable<MatrattProdukt> MatrattProdukt { get; }
     }
 }
