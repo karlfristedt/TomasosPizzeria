@@ -20,5 +20,14 @@ namespace TomasosPizzeria.Models
         {
             return context.Kund;
         }
+        public IQueryable<Bestallning> GetOrders()
+        {
+            return context.Bestallning;
+        }
+        public void SaveOrder(Bestallning best)
+        {
+            context.Bestallning.Add(best);
+            context.SaveChanges();
+        }
     }
 }

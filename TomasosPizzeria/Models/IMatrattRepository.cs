@@ -9,6 +9,9 @@ namespace TomasosPizzeria.Models
     {
         IQueryable<Matratt> GetMatratter();
         IQueryable<Kund> GetCustomers();
+        IQueryable<Bestallning> GetOrders();
+        void SaveOrder(Bestallning bestallning);
+
         //IQueryable<Produkt> Produkter { get; }
         //IQueryable<MatrattProdukt> MatrattProdukt { get; }
     }

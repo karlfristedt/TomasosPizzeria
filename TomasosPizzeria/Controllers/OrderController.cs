@@ -18,6 +18,20 @@ namespace TomasosPizzeria.Controllers
             var selecteddish = repository.GetMatratter().SingleOrDefault(m => m.MatrattId == id);
             //var customer = repository.GetCustomers().SingleOrDefault(c => c.KundId);
 
+            var neworder = new Bestallning();
+            neworder.BestallningDatum = DateTime.Now;
+            neworder.KundId = 1;
+            neworder.Levererad = false;
+            neworder.Totalbelopp += selecteddish.Pris;
+
+            repository.SaveOrder(neworder);
+
+
+
+            //var newbestallmatratt = new BestallningMatratt();
+            //newbestallmatratt.
+            //neworder.BestallningMatratt.Add
+
 
 
 
