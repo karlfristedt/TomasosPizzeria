@@ -26,6 +26,8 @@ namespace TomasosPizzeria
             
             services.AddDbContext<TomasosContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeria:ConnectionString"]));
             services.AddMvc();
+            services.AddDistributedMemoryCache(); 
+            services.AddSession(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +39,8 @@ namespace TomasosPizzeria
             }
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
