@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace TomasosPizzeria.Models
 {
     public class Kundvagn
     {
-
+        [JsonProperty]
         private List<Orderrad> radlista = new List<Orderrad>();
 
         public virtual void AddItem(Matratt matratt)
         {
-            Orderrad rad = radlista
-                .Where(p => p.Matratt.MatrattId == matratt.MatrattId)
-                .FirstOrDefault();
+            Orderrad rad = radlista.FirstOrDefault(p => p.Matratt.MatrattId == matratt.MatrattId);
 
             if (rad == null)
             {
                 radlista.Add(new Orderrad
                 {
-                    Matratt = matratt
+                    Matratt = matratt,
+                    Antal = 1
                 });
             }
             else

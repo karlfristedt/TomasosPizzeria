@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TomasosPizzeria.Models;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 
@@ -14,50 +13,31 @@ namespace TomasosPizzeria.Controllers
     public class CartController : Controller
     {
         private IMatrattRepository repository;
+        private Kundvagn kundvagn;
 
-        public CartController(IMatrattRepository repo) { repository = repo; }
+        public CartController(IMatrattRepository repo, Kundvagn kundvagnService)
+        {
+            repository = repo;
+            kundvagn = kundvagnService;
+        }
 
         [HttpPost]
-        public RedirectToActionResult AddToCart(int mattrattId)
+        public RedirectToActionResult AddToCart(int id)
         {
-            Matratt valdmatratt = repository.GetMatratter().FirstOrDefault(p => p.MatrattId == mattrattId);
+            Matratt valdmatratt = repository.GetAllMatratter().FirstOrDefault(p => p.MatrattId == id);
 
             if (valdmatratt != null)
             {
-                Kundvagn vagn = GetCart(); // Hämtar kundvagn om den finns, annars skapas ny
+                Kundvagn vagn = kundvagn; // Hämtar kundvagn om den finns, annars skapas ny
                 vagn.AddItem(valdmatratt); // Lägg till maträtten till kundvagnen
-                SaveCart(vagn); // Spara kundvagnen i sessionsvariabel
             }
             return RedirectToAction("ShowMenu","Menu");
         }
 
-        public RedirectToActionResult RemoveFromCart(int matrattId)
+        public IActionResult ShowCart()
         {
-            Matratt valdmatratt = repository.GetMatratter().FirstOrDefault(p => p.MatrattId == matrattId);
-            if (valdmatratt != null)
-            {
-                Kundvagn cart = GetCart();
-                cart.RemoveLine(valdmatratt);
-                SaveCart(cart); 
-            }
-            return RedirectToAction("ShowMenu", "Menu");
-        }
-
-        private Kundvagn GetCart()
-        {
-            if (HttpContext.Session.GetString("MinKundvagn") != null)
-            {
-                var str = HttpContext.Session.GetString("MinKundVagn");
-                Kundvagn kundvagn = JsonConvert.DeserializeObject<Kundvagn>(str);
-                return kundvagn;
-            }
-            else return new Kundvagn();
-        }
-
-        private void SaveCart(Kundvagn vagn)
-        {       
-            var serializedValue = JsonConvert.SerializeObject(vagn);
-            HttpContext.Session.SetString("MinKundVagn", serializedValue);
+            Kundvagn aktuellvagn = kundvagn;
+            return View(aktuellvagn);
         }
 
         

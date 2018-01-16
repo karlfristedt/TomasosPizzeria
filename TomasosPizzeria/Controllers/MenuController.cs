@@ -20,7 +20,7 @@ namespace TomasosPizzeria.Controllers
 
         public IActionResult ShowMenu()
         {
-            var matratter = repository.GetMatratter()
+            var matratter = repository.GetAllMatratter()
                 .Include(m => m.MatrattProdukt)
                 .ThenInclude(v => v.Produkt)
                 .ToList();

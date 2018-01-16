@@ -10,61 +10,43 @@ namespace TomasosPizzeria.Controllers
     public class OrderController : Controller
     {
         private IMatrattRepository repository;
+        private Kundvagn kundvagn;
 
-        public OrderController(IMatrattRepository repo) { repository = repo; }
-
-        public IActionResult OrderDish(int id)
+        public OrderController(IMatrattRepository repo, Kundvagn kundvagnService)
         {
+            repository = repo;
+            kundvagn = kundvagnService;
+        }
+
+        public IActionResult PlaceOrder()
+        {
+            Kundvagn vagn = kundvagn;
+
+            Bestallning nybest = new Bestallning();
+            nybest.BestallningDatum = DateTime.Now;
+            //nybest.Kund = repository.GetCustomersById(1); // Måste ändras senare
+            //nybest.BestallningId = 1; Behövs detta?
+            repository.SaveOrder(nybest);
+
+            BestallningMatratt nyBestallningMatratt = new BestallningMatratt();
+            nyBestallningMatratt.Bestallning = nybest;
+            
+
             //var selecteddish = repository.GetMatratter().SingleOrDefault(m => m.MatrattId == id);
             //var customer = repository.GetCustomers().SingleOrDefault(c => c.KundId);
-
             //var neworder = new Bestallning();
             //neworder.BestallningDatum = DateTime.Now;
             //neworder.KundId = 1;
             //neworder.Levererad = false;
             //neworder.Totalbelopp += selecteddish.Pris;
-
             //repository.SaveOrder(neworder);
-
-
-
             //var newbestallmatratt = new BestallningMatratt();
             //newbestallmatratt.
             //neworder.BestallningMatratt.Add
 
-
-
-
             return RedirectToAction("ShowMenu", "Menu");
         }
 
-        public IActionResult AddToCart(int id)
-        {
-            //if (HttpContext.Session.Keys.Any())
-            //{
-            //    var str = HttpContext.Session.GetString("MyProducts");
-            //    List<Produkt> prodlist = JsonConvert.DeserializeObject<List<Produkt>>(str);
-            //    if (prodlist.Exists(x => x.Namn == product) == false)
-            //    {
-            //        prodlist.Add(new Produkt { Antal = quantity, Namn = product, Pris = price });
-            //        var serializedValue1 = JsonConvert.SerializeObject(prodlist);
-
-            //        HttpContext.Session.SetString("MyProducts", serializedValue1);
-            //        return View("SelectProducts", GetListItems());
-            //    }
-            //    else return View("Message2");
-            //}
-
-            //var produktlista = new List<Produkt>();
-
-            //var newprodukt = new Produkt() { Namn = product, Antal = quantity, Pris = price };
-
-            //produktlista.Add(newprodukt);
-
-            //var serializedValue = JsonConvert.SerializeObject(produktlista);
-
-            //HttpContext.Session.SetString("MyProducts", serializedValue);
-            return RedirectToAction("ShowMenu", "Menu");
-        }
+      
     }
 }
