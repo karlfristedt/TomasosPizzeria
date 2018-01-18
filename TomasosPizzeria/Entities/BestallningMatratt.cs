@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using TomasosPizzeria.Models;
 
-namespace TomasosPizzeria.Models
+namespace TomasosPizzeria.Entities
 {
     public partial class BestallningMatratt
     {

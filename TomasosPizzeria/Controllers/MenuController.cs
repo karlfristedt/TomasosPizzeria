@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TomasosPizzeria.Models;
 using Microsoft.AspNetCore.Http;
-
-
+using TomasosPizzeria.Repositories;
 
 
 namespace TomasosPizzeria.Controllers
@@ -16,7 +15,10 @@ namespace TomasosPizzeria.Controllers
     {
         private IMatrattRepository repository;
 
-        public MenuController(IMatrattRepository repo) { repository = repo; }
+        public MenuController(IMatrattRepository repo)
+        {
+            repository = repo;
+        }
 
         public IActionResult ShowMenu()
         {

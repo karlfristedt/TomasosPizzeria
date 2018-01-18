@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using TomasosPizzeria.Entities;
 
 namespace TomasosPizzeria.Models
 {

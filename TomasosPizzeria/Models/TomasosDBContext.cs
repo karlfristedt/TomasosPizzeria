@@ -2,11 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
+using TomasosPizzeria.Entities;
 
 
 namespace TomasosPizzeria.Models
 {
-    public partial class TomasosContext : DbContext
+    public partial class TomasosDBContext : DbContext
     {
         public virtual DbSet<Bestallning> Bestallning { get; set; }
         public virtual DbSet<BestallningMatratt> BestallningMatratt { get; set; }
@@ -16,7 +17,7 @@ namespace TomasosPizzeria.Models
         public virtual DbSet<MatrattTyp> MatrattTyp { get; set; }
         public virtual DbSet<Produkt> Produkt { get; set; }
 
-        public TomasosContext(IConfiguration configuration, DbContextOptions<TomasosContext> options)
+        public TomasosDBContext(IConfiguration configuration, DbContextOptions<TomasosDBContext> options)
             : base(options)
         {
             Configuration = configuration;

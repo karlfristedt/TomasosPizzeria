@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using TomasosPizzeria.Entities;
 
-namespace TomasosPizzeria.Models
+namespace TomasosPizzeria.Repositories
 {
     public interface IMatrattRepository
     {

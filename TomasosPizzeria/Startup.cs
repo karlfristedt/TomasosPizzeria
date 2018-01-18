@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TomasosPizzeria.Models;
-using Microsoft.Extensions.Configuration;
+using TomasosPizzeria.Repositories;
 
 namespace TomasosPizzeria
 {
@@ -23,13 +21,20 @@ namespace TomasosPizzeria
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IMatrattRepository, EFMatrattRepository>();
-            
-            services.AddDbContext<TomasosContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeria:ConnectionString"]));
+            services.AddTransient<IUsers, UserRepository>();
+
+            services.AddDbContext<TomasosDBContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeria:ConnectionString"]));
             services.AddScoped<Kundvagn>(sp => SessionKundvagn.GetCart(sp));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc();
             services.AddDistributedMemoryCache(); 
-            services.AddSession(); 
+            services.AddSession();
+
+            services.AddDbContext<TomasosIdentityDBContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeriaIdentity:ConnectionString"]));
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<TomasosIdentityDBContext>()
+                .AddDefaultTokenProviders();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +48,8 @@ namespace TomasosPizzeria
             app.UseStaticFiles();
 
             app.UseSession();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

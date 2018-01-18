@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TomasosPizzeria.Models;
 using Newtonsoft.Json;
+using TomasosPizzeria.Entities;
+using TomasosPizzeria.Repositories;
 
 
 namespace TomasosPizzeria.Controllers

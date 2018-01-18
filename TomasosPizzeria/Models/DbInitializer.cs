@@ -8,7 +8,7 @@ namespace TomasosPizzeria.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(TomasosContext context)
+        public static void Initialize(TomasosDBContext context)
         {
         //    //context.Database.EnsureCreated();
 

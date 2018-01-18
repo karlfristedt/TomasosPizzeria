@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using TomasosPizzeria.Entities;
+using TomasosPizzeria.Models;
 
-namespace TomasosPizzeria.Models
+namespace TomasosPizzeria.Repositories
 {
     public class EFMatrattRepository : IMatrattRepository
     {
-        private TomasosContext context;
+        private TomasosDBContext context;
 
-        public EFMatrattRepository(TomasosContext ctx) { context = ctx; }
+        public EFMatrattRepository(TomasosDBContext ctx) { context = ctx; }
 
         public IQueryable<Matratt> GetAllMatratter()
         {

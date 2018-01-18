@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace TomasosPizzeria.Models
+namespace TomasosPizzeria.Entities
 {
     public partial class Produkt
     {
