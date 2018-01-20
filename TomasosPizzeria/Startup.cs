@@ -20,7 +20,7 @@ namespace TomasosPizzeria
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IMatrattRepository, EFMatrattRepository>();
+            services.AddTransient<IRestaurantRepository, RestaurantRepository>();
             services.AddTransient<IUsers, UserRepository>();
 
             services.AddDbContext<TomasosDBContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeria:ConnectionString"]));

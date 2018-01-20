@@ -1,45 +1,47 @@
 ﻿
-@using TomasosPizzeria.Entities
-@model IEnumerable<TomasosPizzeria.Entities.Matratt>
+@model IEnumerable<TomasosPizzeria.Entities.MatrattTyp>
 
 <div class="container">
 
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Maträtt</th>
-                <th>Beskrivning</th>
-                <th>Ingredienser</th>
-                <th>Pris</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var p in Model)
-            {
+    @foreach (var p in Model)
+    {
+        <table class="table table-striped">
+            <caption>@p.Beskrivning</caption>
+            <thead>
                 <tr>
-                    <td>@p.MatrattNamn</td>
-                    <td>@p.Beskrivning</td>
-                    <td>
-                        @foreach (var prod in p.MatrattProdukt)
-                        {
-                            @prod.Produkt.ProduktNamn
-                        }
-                    </td>
-                    <td>@p.Pris</td>
-                    <td>
-                        <form asp-action="AddToCart" asp-route-id="@p.MatrattId" asp-controller="Cart" method="post">
-                            @*<input type="hidden" asp-for="@p.MatrattId" />*@
-                            <span class="card-text p-1">
-                                <button type="submit" class="btn btn-success btn-sm pull-right" style="float:right">Lägg till</button>
-                            </span>
-                        </form>
-                    </td>
+                    <th>Namn</th>
+                    <th>Beskrivning</th>
+                    <th>Ingredienser</th>
+                    <th>Pris</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+
+                @foreach (var prod in p.Matratt)
+                {
+                    <tr>
+                        <td>@prod.MatrattNamn</td>
+                        <td>@prod.Beskrivning</td>
+                        <td>
+                            @foreach(var ad in prod.MatrattProdukt.Where(x => x.MatrattId == prod.MatrattId)){
+                            <p>@ad.Produkt.ProduktNamn</p>
+                            }
+
+                        </td>
+                        <td>@prod.Pris</td>
+                        <td>
+                            <form asp-action="AddToCart" asp-route-id="@prod.MatrattId" asp-controller="Cart" method="post">
+                                <span class="card-text p-1">
+                                    <button type="submit" class="btn btn-success btn-sm pull-right" style="float:right">Lägg till</button>
+                                </span>
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
 </div>
 
-  

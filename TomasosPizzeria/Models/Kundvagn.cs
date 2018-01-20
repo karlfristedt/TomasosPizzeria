@@ -34,7 +34,7 @@ namespace TomasosPizzeria.Models
         public virtual void RemoveLine(Matratt matratt) =>
             radlista.RemoveAll(l => l.Matratt.MatrattId == matratt.MatrattId);
 
-        public virtual decimal ComputeTotalValue() =>
+        public virtual int ComputeTotalValue() =>
             radlista.Sum(e => e.Matratt.Pris * e.Antal);
 
         public virtual void Clear() => radlista.Clear();

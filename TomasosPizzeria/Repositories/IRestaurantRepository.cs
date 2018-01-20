@@ -3,19 +3,18 @@ using TomasosPizzeria.Entities;
 
 namespace TomasosPizzeria.Repositories
 {
-    public interface IMatrattRepository
+    public interface IRestaurantRepository
     {
         IQueryable<Matratt> GetAllMatratter();
         IQueryable<Kund> GetAllCustomers();
         IQueryable<Bestallning> GetAllOrders();
+        IQueryable<MatrattTyp> GetAllMatrattTyp();
 
-        IQueryable<Bestallning> GetOrdersById(int id);
-        IQueryable<Kund> GetCustomersById(int id);
-        IQueryable<Matratt> GetMatratterById(int id);
-        
-   
+        Bestallning GetOrderById(int id);
+        Kund GetCustomerById(int id);
+        Matratt GetMatrattById(int id);
 
-        void SaveOrder(Bestallning bestallning);
+        void SaveOrder();
 
         //IQueryable<Produkt> Produkter { get; }
         //IQueryable<MatrattProdukt> MatrattProdukt { get; }

@@ -14,10 +14,10 @@ namespace TomasosPizzeria.Controllers
 {
     public class CartController : Controller
     {
-        private IMatrattRepository repository;
+        private IRestaurantRepository repository;
         private Kundvagn kundvagn;
 
-        public CartController(IMatrattRepository repo, Kundvagn kundvagnService)
+        public CartController(IRestaurantRepository repo, Kundvagn kundvagnService)
         {
             repository = repo;
             kundvagn = kundvagnService;
@@ -39,6 +39,10 @@ namespace TomasosPizzeria.Controllers
         public IActionResult ShowCart()
         {
             Kundvagn aktuellvagn = kundvagn;
+            if (aktuellvagn.GetOrderrader().Count() == 0)
+            {
+                return View("EmptyCartMessage");
+            }
             return View(aktuellvagn);
         }
 

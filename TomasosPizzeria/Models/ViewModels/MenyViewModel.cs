@@ -6,8 +6,12 @@ using TomasosPizzeria.Entities;
 
 namespace TomasosPizzeria.Models.ViewModels
 {
-    public class MatrattViewModel
+    public class MenyViewModel
     {
-        public IEnumerable<Matratt> Matratter { get; set; }
+        //public MenyViewModel()
+        //{
+        //    Matratter = new List<MatrattTyp>;
+        //}
+        public ICollection<MatrattTyp> Matratter { get; set; }
     }
 }
