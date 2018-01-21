@@ -54,10 +54,10 @@ namespace TomasosPizzeria.Controllers
         }
 
 
-        public async Task<IActionResult> EditUser(string id)
-        {
-            return View();
-        }
+        //public async Task<IActionResult> EditUser(string id)
+        //{
+        //    return View();
+        //}
 
         public IActionResult ShowUsers()
         {

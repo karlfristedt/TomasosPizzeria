@@ -51,6 +51,8 @@ namespace TomasosPizzeria
 
             app.UseAuthentication();
 
+            TomasosIdentityDBContext.CreateRoles(app.ApplicationServices).Wait();
+
             //app.UseMvc(routes =>
             //{
             //    routes.MapRoute(
