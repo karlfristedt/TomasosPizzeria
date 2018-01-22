@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using TomasosPizzeria.Entities;
 using TomasosPizzeria.Models;
 using TomasosPizzeria.Repositories;
@@ -7,6 +8,7 @@ using TomasosPizzeria.Repositories;
 
 namespace TomasosPizzeria.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private IRestaurantRepository repository;

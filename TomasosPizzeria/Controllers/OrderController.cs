@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TomasosPizzeria.Models;
 using TomasosPizzeria.Repositories;
 
 namespace TomasosPizzeria.Controllers
 {
+    //[Authorize(Roles = "RegularUser")]
     public class OrderController : Controller
     {
         private IRestaurantRepository repository;
@@ -14,8 +16,7 @@ namespace TomasosPizzeria.Controllers
             repository = repo;
             kundvagn = kundvagnService;
         }
-
-        [HttpPost]
+        
         public IActionResult PlaceOrder()
         {
             repository.SaveOrder();

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using TomasosPizzeria.Models;
 using TomasosPizzeria.Models.ViewModels;
+using TomasosPizzeria.Entities;
+using TomasosPizzeria.Repositories;
 
 namespace TomasosPizzeria.Controllers
 {
@@ -16,19 +14,23 @@ namespace TomasosPizzeria.Controllers
     {
         private SignInManager<ApplicationUser> _signInManager;
         private UserManager<ApplicationUser> _userManager;
+        private IRestaurantRepository repository;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IRestaurantRepository repo)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            repository = repo;
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel login)
         {
             if (ModelState.IsValid)
@@ -40,7 +42,7 @@ namespace TomasosPizzeria.Controllers
                     await _signInManager.SignOutAsync();
 
                     var loginresult =
-                        await _signInManager.PasswordSignInAsync(logincandidate, login.Password, false, false);
+                        await _signInManager.PasswordSignInAsync(logincandidate, login.Password,true,false);
 
                     if (loginresult.Succeeded)
                     {
@@ -56,7 +58,7 @@ namespace TomasosPizzeria.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return View("Login");
+            return RedirectToAction("Login");
         }
 
         [HttpGet]
@@ -71,17 +73,36 @@ namespace TomasosPizzeria.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newuser = new ApplicationUser
+                var newidentityuser = new ApplicationUser
                 {
                     Name = model.FullName,
                     Email = model.Email,
-                    UserName = model.UserName
+                    UserName = model.UserName,
+                    PostalCode = model.PostalCode,
+                    Adress = model.Adress,
+                    City = model.City,
+                    PhoneNumber = model.Phone,
                 };
 
-                var identityresult = await _userManager.CreateAsync(newuser, model.Password);
+                var newuser = new Kund
+                {
+                    Namn = model.FullName,
+                    Email = model.Email,
+                    AnvandarNamn = model.UserName,
+                    Postnr = model.PostalCode,
+                    Gatuadress = model.Adress,
+                    Postort = model.City,
+                    Telefon = model.Phone,
+                    Losenord = model.Password
+                };
+
+                
+
+                var identityresult = await _userManager.CreateAsync(newidentityuser, model.Password);
 
                 if (identityresult.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(newidentityuser, "Regular");
                     return View("RegistrationSuccess");
                 }
                 else
@@ -101,16 +122,28 @@ namespace TomasosPizzeria.Controllers
         //    return View();
         //}
 
-        [Authorize]
-        public IActionResult ShowUsers()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ShowUsers()
         {
-            var allusers = _userManager.Users;
-            return View(allusers);
+            var regularusers = await _userManager.GetUsersInRoleAsync("RegularUser");
+            var premiumusers = await _userManager.GetUsersInRoleAsync("PremiumUser");
+            
+
+            var users = new UsersViewModel
+            {
+                RegularUsers = regularusers,
+                PremiumUsers = premiumusers
+            };
+
+
+            return View(users);
         }
 
+        [Authorize]
         public async Task<IActionResult> RemoveUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
+            
             await _userManager.DeleteAsync(user);
             return RedirectToAction("ShowUsers");
         }

@@ -14,6 +14,7 @@ namespace TomasosPizzeria.Repositories
         Kund GetCustomerById(int id);
         Matratt GetMatrattById(int id);
 
+        void AddCustomer(Kund user);
         void SaveOrder();
 
         //IQueryable<Produkt> Produkter { get; }

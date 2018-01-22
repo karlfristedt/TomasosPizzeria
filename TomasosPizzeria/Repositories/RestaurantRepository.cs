@@ -87,5 +87,14 @@ namespace TomasosPizzeria.Repositories
             //_context.Bestallning.Add(best);
             //_context.SaveChanges();
         }
+
+        public void AddCustomer(Kund user)
+        {
+            if (_context.Kund.Any(c => c.AnvandarNamn == user.AnvandarNamn))
+            {
+                return;
+            }
+            _context.Add(user);
+        }
     }
 }

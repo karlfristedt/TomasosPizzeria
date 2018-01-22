@@ -46,29 +46,28 @@ namespace TomasosPizzeria
             }
 
             app.UseStaticFiles();
-
             app.UseSession();
-
             app.UseAuthentication();
 
-            app.UseAuthentication();
-
-            TomasosIdentityDBContext.CreateRoles(app.ApplicationServices, Configuration).Wait(); // Seed roles Admin, RegularUser and PremiumUser
+            TomasosIdentityDBContext.CreateRoles(app.ApplicationServices, Configuration)
+                .Wait(); // Seed roles Admin, RegularUser and PremiumUser
 
             TomasosIdentityDBContext.CreateAdminUser(app.ApplicationServices, Configuration).Wait(); // Seed Admin user
+            TomasosIdentityDBContext.CreateRegularUser(app.ApplicationServices, Configuration).Wait(); // Seed Regular user
+            TomasosIdentityDBContext.CreatePremiumUser(app.ApplicationServices, Configuration).Wait(); // Seed Regular user
 
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Account}/{action=ShowUsers}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Account}/{action=ShowUsers}/{id?}");
+            //});
 
         }
     }

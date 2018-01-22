@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using TomasosPizzeria.Repositories;
 using TomasosPizzeria.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using TomasosPizzeria.Entities;
 
 namespace TomasosPizzeria.Controllers
 {
+    [Authorize]
     public class MenuController : Controller
     {
         private IRestaurantRepository repository;
@@ -23,27 +25,6 @@ namespace TomasosPizzeria.Controllers
                     .ThenInclude(m => m.MatrattProdukt)
                         .ThenInclude(m => m.Produkt)
                 .ToList();
-
-            //
-            //var ratter = repository.GetAllMatratter()
-            //    .Include(j => j.MatrattProdukt)
-            //    .ThenInclude(i => i.)
-
-            //var menuview = new MenyViewModel();
-
-            //foreach (var typ in kategorier)
-            //{
-                
-            //}
-
-            //var menuview = select ddd from repository.GetAllMatrattTyp()
-
-
-            //var query = from a in repository.GetAllMatrattTyp()
-            //            select new MenyViewModel
-            //            {
-            //                Matratter.Add(a.Matratt)
-            //            };
 
             return View(kategorier);
         }

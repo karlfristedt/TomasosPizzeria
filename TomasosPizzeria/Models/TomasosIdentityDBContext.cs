@@ -33,15 +33,9 @@ namespace TomasosPizzeria.Models
                 await roleManager.CreateAsync(new IdentityRole(configuration["Data:Roles:PremiumUser"]));
             }
 
-            //AppUser user = new AppUser { UserName = username, Email = email };
-            //IdentityResult result = await userManager.CreateAsync(user, password); if (result.Succeeded) { await userManager.AddToRoleAsync(user, role); }
-
-
-
         }
         public static async Task CreateAdminUser(IServiceProvider serviceProvider, IConfiguration configuration)
         {
-            RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             UserManager<ApplicationUser> userManager =
                 serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -53,6 +47,10 @@ namespace TomasosPizzeria.Models
                     UserName = configuration["Data:AdminUser:UserName"],
                     Email = configuration["Data:AdminUser:Email"],
                     Name = configuration["Data:AdminUser:Name"],
+                    Adress = configuration["Data:AdminUser:Adress"],
+                    PhoneNumber = configuration["Data:AdminUser:Phone"],
+                    City = configuration["Data:AdminUser:City"],
+                    PostalCode = configuration["Data:AdminUser:PostalCode"]
                 };
 
                 var result = await userManager.CreateAsync(adminuser, configuration["Data:AdminUser:Password"]);
@@ -64,25 +62,67 @@ namespace TomasosPizzeria.Models
 
 
             }
+            
 
-            if (await roleManager.FindByNameAsync("Admin") == null)
+        }
+        public static async Task CreateRegularUser(IServiceProvider serviceProvider, IConfiguration configuration)
+        {
+
+            UserManager<ApplicationUser> userManager =
+                serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            if (await userManager.FindByNameAsync(configuration["Data:RegularUser:UserName"]) == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                var regularuser = new ApplicationUser
+                {
+                    UserName = configuration["Data:RegularUser:UserName"],
+                    Email = configuration["Data:RegularUser:Email"],
+                    Name = configuration["Data:RegularUser:Name"],
+                    Adress = configuration["Data:RegularUser:Adress"],
+                    PhoneNumber = configuration["Data:RegularUser:Phone"],
+                    City = configuration["Data:RegularUser:City"],
+                    PostalCode = configuration["Data:RegularUser:PostalCode"]
+                };
+
+                var result = await userManager.CreateAsync(regularuser, configuration["Data:RegularUser:Password"]);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(regularuser, configuration["Data:RegularUser:Role"]);
+                }
+
+
             }
 
-            if (await roleManager.FindByNameAsync("RegularUser") == null)
+        }
+        public static async Task CreatePremiumUser(IServiceProvider serviceProvider, IConfiguration configuration)
+        {
+
+            UserManager<ApplicationUser> userManager =
+                serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            if (await userManager.FindByNameAsync(configuration["Data:PremiumUser:UserName"]) == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("RegularUser"));
+                var premiumuser = new ApplicationUser
+                {
+                    UserName = configuration["Data:PremiumUser:UserName"],
+                    Email = configuration["Data:PremiumUser:Email"],
+                    Name = configuration["Data:PremiumUser:Name"],
+                    PhoneNumber = configuration["Data:PremiumUser:Phone"],
+                    City = configuration["Data:PremiumUser:City"],
+                    PostalCode = configuration["Data:PremiumUser:PostalCode"],
+                    Adress = configuration["Data:PremiumUser:Adress"]
+                };
+
+                var result = await userManager.CreateAsync(premiumuser, configuration["Data:PremiumUser:Password"]);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(premiumuser, configuration["Data:PremiumUser:Role"]);
+                }
+
+
             }
-            if (await roleManager.FindByNameAsync("PremiumUser") == null)
-            {
-                await roleManager.CreateAsync(new IdentityRole("PremiumUser"));
-            }
-
-            //AppUser user = new AppUser { UserName = username, Email = email };
-            //IdentityResult result = await userManager.CreateAsync(user, password); if (result.Succeeded) { await userManager.AddToRoleAsync(user, role); }
-
-
 
         }
 

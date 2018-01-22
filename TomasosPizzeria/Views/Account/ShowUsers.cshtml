@@ -1,5 +1,7 @@
 ﻿
-@model IEnumerable<ApplicationUser>
+@*@model IEnumerable<ApplicationUser>*@
+
+@model UsersViewModel
 
 <div class="container">
 
@@ -11,20 +13,36 @@
             <tr>
                 <th>Namn</th>
                 <th>Användarnamn</th>
+                <th>Roll</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
 
-            @foreach (var user in Model)
+            @foreach (var regularuser in Model.RegularUsers)
             {
                 <tr>
-                    <td>@user.Name</td>
-                    <td>@user.UserName</td>
+                    <td>@regularuser.Name</td>
+                    <td>@regularuser.UserName</td>
+                    <td>RegularUser</td>
                     <td>
                         <div class="container">
-                                <a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-warning pull-right ">Ändra</a>
-                                <a asp-controller="Account" asp-action="RemoveUser" asp-route-id="@user.Id" class="btn btn-danger pull-right">Ta bort</a>
+                                <a asp-controller="Account" asp-action="EditUser" asp-route-id="@regularuser.Id" class="btn btn-warning pull-right ">Ändra</a>
+                                <a asp-controller="Account" asp-action="RemoveUser" asp-route-id="@regularuser.Id" class="btn btn-danger pull-right">Ta bort</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @foreach (var premiumuser in Model.PremiumUsers)
+            {
+                <tr>
+                    <td>@premiumuser.Name</td>
+                    <td>@premiumuser.UserName</td>
+                    <td>PremiumUser</td>
+                    <td>
+                        <div class="container">
+                            <a asp-controller="Account" asp-action="EditUser" asp-route-id="@premiumuser.Id" class="btn btn-warning pull-right ">Ändra</a>
+                            <a asp-controller="Account" asp-action="RemoveUser" asp-route-id="@premiumuser.Id" class="btn btn-danger pull-right">Ta bort</a>
                         </div>
                     </td>
                 </tr>

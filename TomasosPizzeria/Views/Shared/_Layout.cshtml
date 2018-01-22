@@ -51,8 +51,25 @@
                                 </ul>
                             </div>
                         </li>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Administration Tools<span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a asp-controller="Account" asp-action="ShowUsers">Users</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        }
+                        
                     }
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+
                     <li><a asp-controller="Cart" asp-action="ShowCart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
                 </ul>
             </div>
