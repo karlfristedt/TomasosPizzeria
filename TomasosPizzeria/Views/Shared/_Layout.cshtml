@@ -32,10 +32,26 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a asp-controller="Home" asp-action="Index" >Home</a></li>
+                    <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-action="ShowMenu" asp-controller="Menu">Menu</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    @User.Identity.Name<span class="caret"></span>
+                                </button>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a asp-controller="Account" asp-action="LogOut">Logga ut</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    }
                     <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
                     <li><a asp-controller="Cart" asp-action="ShowCart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
                 </ul>
@@ -43,7 +59,7 @@
         </div>
     </nav>
 
-        @RenderBody()
+    @RenderBody()
 
     <footer class="container-fluid text-center">
         <p>Tomasos Online Pizza Store Copyright</p>

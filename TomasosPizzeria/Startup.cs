@@ -51,7 +51,11 @@ namespace TomasosPizzeria
 
             app.UseAuthentication();
 
-            TomasosIdentityDBContext.CreateRoles(app.ApplicationServices).Wait();
+            app.UseAuthentication();
+
+            TomasosIdentityDBContext.CreateRoles(app.ApplicationServices, Configuration).Wait(); // Seed roles Admin, RegularUser and PremiumUser
+
+            TomasosIdentityDBContext.CreateAdminUser(app.ApplicationServices, Configuration).Wait(); // Seed Admin user
 
             //app.UseMvc(routes =>
             //{

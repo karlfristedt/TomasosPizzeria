@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TomasosPizzeria.Models;
@@ -20,6 +23,42 @@ namespace TomasosPizzeria.Controllers
             _userManager = userManager;
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel login)
+        {
+            if (ModelState.IsValid)
+            {
+                var logincandidate = await _userManager.FindByNameAsync(login.UserName);
+
+                if (logincandidate != null)
+                {
+                    await _signInManager.SignOutAsync();
+
+                    var loginresult =
+                        await _signInManager.PasswordSignInAsync(logincandidate, login.Password, false, false);
+
+                    if (loginresult.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    ModelState.AddModelError("", "Fel användarnamn eller lösenord");
+                }
+            }
+
+            return View(login);
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return View("Login");
+        }
+
         [HttpGet]
         public IActionResult RegisterUser()
         {
@@ -32,10 +71,13 @@ namespace TomasosPizzeria.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newuser = new ApplicationUser();
-                newuser.Name = model.FullName;
-                newuser.Email = model.Email;
-                newuser.UserName = model.UserName;
+                var newuser = new ApplicationUser
+                {
+                    Name = model.FullName,
+                    Email = model.Email,
+                    UserName = model.UserName
+                };
+
                 var identityresult = await _userManager.CreateAsync(newuser, model.Password);
 
                 if (identityresult.Succeeded)
@@ -46,7 +88,7 @@ namespace TomasosPizzeria.Controllers
                 {
                     foreach (IdentityError error in identityresult.Errors)
                     {
-                        ModelState.AddModelError("",error.Description);
+                        ModelState.AddModelError("", error.Description);
                     }
                 }
             }
@@ -59,6 +101,7 @@ namespace TomasosPizzeria.Controllers
         //    return View();
         //}
 
+        [Authorize]
         public IActionResult ShowUsers()
         {
             var allusers = _userManager.Users;
@@ -71,6 +114,7 @@ namespace TomasosPizzeria.Controllers
             await _userManager.DeleteAsync(user);
             return RedirectToAction("ShowUsers");
         }
+
 
     }
 }

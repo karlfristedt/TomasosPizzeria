@@ -43,6 +43,28 @@ namespace TomasosPizzeria.Models
         {
             RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
+            UserManager<ApplicationUser> userManager =
+                serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            if (await userManager.FindByNameAsync(configuration["Data:AdminUser:UserName"]) == null)
+            {
+                var adminuser = new ApplicationUser
+                {
+                    UserName = configuration["Data:AdminUser:UserName"],
+                    Email = configuration["Data:AdminUser:Email"],
+                    Name = configuration["Data:AdminUser:Name"],
+                };
+
+                var result = await userManager.CreateAsync(adminuser, configuration["Data:AdminUser:Password"]);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(adminuser, configuration["Data:AdminUser:Role"]);
+                }
+
+
+            }
+
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));

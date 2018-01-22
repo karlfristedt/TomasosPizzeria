@@ -1,0 +1,20 @@
+﻿@model LoginViewModel
+
+<div class="container">
+    <h2>Login</h2>
+    
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @*<input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />*@
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+
+        <button type="submit" class="btn btn-default">Login</button>
+    </form>
+    <text>_123jkLi Admin</text>
+    <br />
+    <a asp-controller="Account" asp-action="RegisterUser"> Ny användare? Klicka här för att registrera dig.</a>
+</div>
