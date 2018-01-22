@@ -28,7 +28,7 @@
                     <td>
                         <div class="container">
                                 <a asp-controller="Account" asp-action="EditUser" asp-route-id="@regularuser.Id" class="btn btn-warning pull-right ">Ändra</a>
-                                <a asp-controller="Account" asp-action="RemoveUser" asp-route-id="@regularuser.Id" class="btn btn-danger pull-right">Ta bort</a>
+                                <a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@regularuser.Id" class="btn btn-danger pull-right">Ta bort</a>
                         </div>
                     </td>
                 </tr>
@@ -42,7 +42,7 @@
                     <td>
                         <div class="container">
                             <a asp-controller="Account" asp-action="EditUser" asp-route-id="@premiumuser.Id" class="btn btn-warning pull-right ">Ändra</a>
-                            <a asp-controller="Account" asp-action="RemoveUser" asp-route-id="@premiumuser.Id" class="btn btn-danger pull-right">Ta bort</a>
+                            <a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@premiumuser.Id" class="btn btn-danger pull-right">Ta bort</a>
                         </div>
                     </td>
                 </tr>

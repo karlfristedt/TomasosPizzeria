@@ -62,12 +62,14 @@ namespace TomasosPizzeria.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles="Admin")]
         public IActionResult RegisterUser()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(RegisterUserViewModel model)
         {
@@ -84,7 +86,7 @@ namespace TomasosPizzeria.Controllers
                     PhoneNumber = model.Phone,
                 };
 
-                var newuser = new Kund
+                var newuser = new Kund // För att lägga till i huvuddatabasen
                 {
                     Namn = model.FullName,
                     Email = model.Email,
@@ -96,13 +98,13 @@ namespace TomasosPizzeria.Controllers
                     Losenord = model.Password
                 };
 
-                
+                repository.AddCustomer(newuser);
 
                 var identityresult = await _userManager.CreateAsync(newidentityuser, model.Password);
 
                 if (identityresult.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(newidentityuser, "Regular");
+                    await _userManager.AddToRoleAsync(newidentityuser, "RegularUser");
                     return View("RegistrationSuccess");
                 }
                 else
@@ -116,11 +118,11 @@ namespace TomasosPizzeria.Controllers
             return View(model);
         }
 
-
-        //public async Task<IActionResult> EditUser(string id)
-        //{
-        //    return View();
-        //}
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            return View();
+        }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ShowUsers()
@@ -139,8 +141,8 @@ namespace TomasosPizzeria.Controllers
             return View(users);
         }
 
-        [Authorize]
-        public async Task<IActionResult> RemoveUser(string id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             

@@ -95,6 +95,7 @@ namespace TomasosPizzeria.Repositories
                 return;
             }
             _context.Add(user);
+            _context.SaveChanges();
         }
     }
 }
