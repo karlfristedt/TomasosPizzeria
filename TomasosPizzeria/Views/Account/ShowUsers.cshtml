@@ -1,11 +1,10 @@
 ﻿
-@*@model IEnumerable<ApplicationUser>*@
-
-@model UsersViewModel
+@model IEnumerable<UsersViewModel>
 
 
 
     <a asp-controller="Account" asp-action="RegisterUser" class="btn btn-default">Lägg till användare</a>
+    
 
     <table class="table table-striped table-bordered">
         <caption>Användare</caption>
@@ -18,31 +17,20 @@
         </thead>
         <tbody>
 
-        @foreach (var regularuser in Model.RegularUsers)
+        @foreach (var user in Model)
         {
             <tr>
-                <td>@regularuser.UserName</td>
-                <td><div id="#MinDetaljDiv">RegularUser</div></td>
+                <td>@user.UserName</td>
+                <td><div id="@user.UserName">@user.Role</div></td>
                 <td>
-                    <form asp-controller="Account" asp-action="ChangeRole" method="get">
-                        <select asp-items=@ViewBag.Roles
-                                data-ajax="true"
-                                data-ajax-method="GET"
-                                data-ajax-mode="replace"
-                                data-ajax-update="#MinDetaljDiv"></select>
-                        <button type="submit">khgkhj</button>
+                    <form asp-controller="Account" asp-action="ChangeRole" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#@user.UserName">
+
+                        <select name="role" asp-items=@ViewBag.Roles></select>
+                        <button class="btn-default" type="submit">Ändra</button>
+                        <input type="hidden" name="username" value="@user.UserName">
+
+
                     </form>
-                </td>
-            </tr>
-        }
-        
-        @foreach (var premiumuser in Model.PremiumUsers)
-        {
-            <tr>
-                <td>@premiumuser.UserName</td>
-                <td>PremiumUser</td>
-                <td>
-                    <select asp-items=@ViewBag.Roles></select>
                 </td>
             </tr>
         }

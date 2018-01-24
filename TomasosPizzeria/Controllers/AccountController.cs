@@ -122,19 +122,34 @@ namespace TomasosPizzeria.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ShowUsers()
         {
+            
             var regularusers = await _userManager.GetUsersInRoleAsync("RegularUser");
+            
+
             var premiumusers = await _userManager.GetUsersInRoleAsync("PremiumUser");
+
+            var temp = regularusers.Select(s => new UsersViewModel
+            {
+                UserName = s.UserName,
+                Role = "RegularUser"
+            });
+
+            var test = premiumusers.Select(s => new UsersViewModel
+            {
+                UserName = s.UserName,
+                Role = "PremiumUser"
+            });
+
+            var usertest = temp.Concat(test);
+
+            
 
             ViewBag.Roles = _identityrepo.GetAllRoles().ToList().Select(item =>
                 new SelectListItem {Text = item.Name.ToString(), Value = item.Name});
 
-            var users = new UsersViewModel
-            {
-                RegularUsers = regularusers,
-                PremiumUsers = premiumusers
-            };
+           
 
-            return View(users);
+            return View(usertest);
         }
 
         [Authorize(Roles = "Admin")]
@@ -146,14 +161,19 @@ namespace TomasosPizzeria.Controllers
             await _userManager.DeleteAsync(identityuser);
             return RedirectToAction("ShowUsers");
         }
-        public async Task<IActionResult> ChangeRole(string id)
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(string role, string username)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await _userManager.FindByNameAsync(username);
             var usercurrentroles = await _userManager.GetRolesAsync(user);
             var userrole = usercurrentroles[0];
-            await _userManager.AddToRoleAsync(user, id);
-            await _userManager.RemoveFromRoleAsync(user, userrole);
-            ViewBag.Role = id;
+            if (userrole != role)
+            {
+                await _userManager.AddToRoleAsync(user, role);
+                await _userManager.RemoveFromRoleAsync(user, userrole);
+                ViewBag.Role = role;
+            }
+            else ViewBag.Role = userrole;
             return PartialView("_RolePartialView");
         }
 
