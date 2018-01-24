@@ -28,5 +28,55 @@ namespace TomasosPizzeria.Controllers
 
             return View(kategorier);
         }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult ShowEditMenu()
+        {
+            var kategorier = repository.GetAllMatrattTyp()
+                .Include(m => m.Matratt)
+                .ThenInclude(m => m.MatrattProdukt)
+                .ThenInclude(m => m.Produkt)
+                .ToList();
+
+            return View(kategorier);
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditDish(int id)
+        {
+            var matratt = repository.GetMatrattById(id);
+            
+            var produkter = matratt.MatrattProdukt.Where(x => x.MatrattId == id).Select(y => y.Produkt);
+
+            var model = new EditDishViewModel
+            {
+                MatrattNamn = matratt.MatrattNamn,
+                MatrattTyp = matratt.MatrattTypNavigation.Beskrivning,
+                Pris = matratt.Pris,
+                Beskrivning = matratt.Beskrivning,
+            };
+
+           model.Produkter = produkter;
+
+            return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult EditDish(EditDishViewModel model)
+        {
+            //var matratt = repository.GetMatrattById(id);
+
+            //var produkter = matratt.MatrattProdukt.Where(x => x.MatrattId == id).Select(y => y.Produkt);
+
+            //var model = new EditDishViewModel
+            //{
+            //    MatrattNamn = matratt.MatrattNamn,
+            //    MatrattTyp = matratt.MatrattTypNavigation.Beskrivning,
+            //    Pris = matratt.Pris,
+            //};
+
+            //model.Produkter = produkter;
+
+            return RedirectToAction("ShowEditMenu");
+        }
     }
 }

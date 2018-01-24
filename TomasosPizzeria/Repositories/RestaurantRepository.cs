@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TomasosPizzeria.Entities;
 using TomasosPizzeria.Models;
 
@@ -55,8 +56,13 @@ namespace TomasosPizzeria.Repositories
         }
         public Matratt GetMatrattById(int id)
         {
-            var matratter = _context.Matratt.SingleOrDefault(m => m.MatrattId == id);
-            return matratter;
+            var matratt = _context.Matratt
+                .Include(a => a.MatrattProdukt)
+                .ThenInclude(p => p.Produkt)
+                .Include(t => t.MatrattTypNavigation)
+                .SingleOrDefault(m => m.MatrattId == id);
+            
+            return matratt;
         }
         
         public void SaveOrder(string username)
@@ -126,6 +132,28 @@ namespace TomasosPizzeria.Repositories
             _context.BestallningMatratt.RemoveRange(matrattprodukter);
             _context.Bestallning.RemoveRange(userorders);
             _context.Kund.Remove(user);
+            _context.SaveChanges();
+        }
+
+        public bool ChangeOrderStatus(int id, bool status)
+        {
+            var order = GetOrderById(id);
+            if (order.Levererad != status)
+            {
+                order.Levererad = status;
+                _context.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        public void DeleteOrder(int id)
+        {
+            var order = GetOrderById(id);
+            var matrattbest = _context.BestallningMatratt.Where(b => b.BestallningId == id);
+            _context.BestallningMatratt.RemoveRange(matrattbest);
+            _context.Bestallning.Remove(order);
             _context.SaveChanges();
         }
     }

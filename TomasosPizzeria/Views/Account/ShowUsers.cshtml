@@ -1,21 +1,19 @@
 ﻿
 @model IEnumerable<UsersViewModel>
 
+<a asp-controller="Account" asp-action="RegisterUser" class="btn btn-default">Lägg till användare</a>
 
 
-    <a asp-controller="Account" asp-action="RegisterUser" class="btn btn-default">Lägg till användare</a>
-    
-
-    <table class="table table-striped table-bordered">
-        <caption>Användare</caption>
-        <thead>
+<table class="table table-striped table-bordered">
+    <caption>Användare</caption>
+    <thead>
         <tr>
             <th>Användarnamn</th>
             <th>Roll</th>
             <th></th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
 
         @foreach (var user in Model)
         {
@@ -29,14 +27,12 @@
                         <button class="btn-default" type="submit">Ändra</button>
                         <input type="hidden" name="username" value="@user.UserName">
 
-
                     </form>
                 </td>
             </tr>
         }
 
-        </tbody>
-    </table>
+    </tbody>
+</table>
 
 
-   

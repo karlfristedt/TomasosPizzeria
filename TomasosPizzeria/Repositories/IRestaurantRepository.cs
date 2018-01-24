@@ -21,6 +21,8 @@ namespace TomasosPizzeria.Repositories
         void AddCustomer(Kund user);
         void UpdateCustomer(Kund user);
         void SaveOrder(string username);
+        bool ChangeOrderStatus(int id, bool status);
+        void DeleteOrder(int id);
 
     }
 }

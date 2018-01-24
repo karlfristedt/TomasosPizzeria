@@ -117,7 +117,7 @@ namespace TomasosPizzeria.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        
        
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ShowUsers()
@@ -152,6 +152,7 @@ namespace TomasosPizzeria.Controllers
             return View(usertest);
         }
 
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string username)
         {
@@ -162,6 +163,7 @@ namespace TomasosPizzeria.Controllers
             return RedirectToAction("ShowUsers");
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRole(string role, string username)
         {
             var user = await _userManager.FindByNameAsync(username);

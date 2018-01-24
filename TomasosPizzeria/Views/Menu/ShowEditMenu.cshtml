@@ -1,0 +1,41 @@
+﻿
+@model IEnumerable<MatrattTyp>
+
+
+
+@foreach (var p in Model)
+{
+    <table class="table table-striped table-bordered">
+        <caption>@p.Beskrivning</caption>
+        <thead>
+        <tr>
+            <th>Namn</th>
+            <th>Beskrivning</th>
+            <th>Ingredienser</th>
+            <th>Pris</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @foreach (var prod in p.Matratt)
+        {
+            <tr>
+                <td>@prod.MatrattNamn</td>
+                <td>@prod.Beskrivning</td>
+                <td>
+                    @foreach(var ad in prod.MatrattProdukt.Where(x => x.MatrattId == prod.MatrattId)){
+                        <p>@ad.Produkt.ProduktNamn</p>
+                    }
+
+                </td>
+                <td>@prod.Pris</td>
+                <td>
+                   <a asp-controller="Menu" asp-action="EditDish" asp-route-id="@prod.MatrattId">Ändra</a>
+                </td>
+            </tr>
+        }
+
+        </tbody>
+    </table>
+}
