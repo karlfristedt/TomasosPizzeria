@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 using TomasosPizzeria.Entities;
 
 namespace TomasosPizzeria.Repositories
@@ -13,11 +15,12 @@ namespace TomasosPizzeria.Repositories
         Bestallning GetOrderById(int id);
         Kund GetCustomerById(int id);
         Matratt GetMatrattById(int id);
+        Kund GetCustomerByUserName(string username);
 
+        void DeleteCustomer(string username);
         void AddCustomer(Kund user);
-        void SaveOrder();
+        void UpdateCustomer(Kund user);
+        void SaveOrder(string username);
 
-        //IQueryable<Produkt> Produkter { get; }
-        //IQueryable<MatrattProdukt> MatrattProdukt { get; }
     }
 }

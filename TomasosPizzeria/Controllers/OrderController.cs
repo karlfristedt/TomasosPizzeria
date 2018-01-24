@@ -19,7 +19,7 @@ namespace TomasosPizzeria.Controllers
         
         public IActionResult PlaceOrder()
         {
-            repository.SaveOrder();
+            repository.SaveOrder(User.Identity.Name);
 
             return RedirectToAction("ShowMenu", "Menu");
         }

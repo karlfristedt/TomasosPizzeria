@@ -21,7 +21,7 @@ namespace TomasosPizzeria
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IRestaurantRepository, RestaurantRepository>();
-            services.AddTransient<IUsers, UserRepository>();
+            services.AddTransient<IIdentityRepository, IdentityRepository>();
 
             services.AddDbContext<TomasosDBContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeria:ConnectionString"]));
             services.AddScoped<Kundvagn>(sp => SessionKundvagn.GetCart(sp));

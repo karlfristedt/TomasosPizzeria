@@ -24,7 +24,7 @@ namespace TomasosPizzeria.Controllers
         public RedirectToActionResult AddToCart(int id)
         {
             Matratt valdmatratt = repository.GetAllMatratter().FirstOrDefault(p => p.MatrattId == id);
-
+            
             if (valdmatratt != null)
             {
                 Kundvagn vagn = kundvagn; // Hämtar kundvagn om den finns, annars skapas ny

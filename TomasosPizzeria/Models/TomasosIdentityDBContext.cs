@@ -44,13 +44,7 @@ namespace TomasosPizzeria.Models
             {
                 var adminuser = new ApplicationUser
                 {
-                    UserName = configuration["Data:AdminUser:UserName"],
-                    Email = configuration["Data:AdminUser:Email"],
-                    Name = configuration["Data:AdminUser:Name"],
-                    Adress = configuration["Data:AdminUser:Adress"],
-                    PhoneNumber = configuration["Data:AdminUser:Phone"],
-                    City = configuration["Data:AdminUser:City"],
-                    PostalCode = configuration["Data:AdminUser:PostalCode"]
+                    UserName = configuration["Data:AdminUser:UserName"]      
                 };
 
                 var result = await userManager.CreateAsync(adminuser, configuration["Data:AdminUser:Password"]);
@@ -75,13 +69,7 @@ namespace TomasosPizzeria.Models
             {
                 var regularuser = new ApplicationUser
                 {
-                    UserName = configuration["Data:RegularUser:UserName"],
-                    Email = configuration["Data:RegularUser:Email"],
-                    Name = configuration["Data:RegularUser:Name"],
-                    Adress = configuration["Data:RegularUser:Adress"],
-                    PhoneNumber = configuration["Data:RegularUser:Phone"],
-                    City = configuration["Data:RegularUser:City"],
-                    PostalCode = configuration["Data:RegularUser:PostalCode"]
+                    UserName = configuration["Data:RegularUser:UserName"]
                 };
 
                 var result = await userManager.CreateAsync(regularuser, configuration["Data:RegularUser:Password"]);
@@ -105,13 +93,7 @@ namespace TomasosPizzeria.Models
             {
                 var premiumuser = new ApplicationUser
                 {
-                    UserName = configuration["Data:PremiumUser:UserName"],
-                    Email = configuration["Data:PremiumUser:Email"],
-                    Name = configuration["Data:PremiumUser:Name"],
-                    PhoneNumber = configuration["Data:PremiumUser:Phone"],
-                    City = configuration["Data:PremiumUser:City"],
-                    PostalCode = configuration["Data:PremiumUser:PostalCode"],
-                    Adress = configuration["Data:PremiumUser:Adress"]
+                    UserName = configuration["Data:PremiumUser:UserName"]
                 };
 
                 var result = await userManager.CreateAsync(premiumuser, configuration["Data:PremiumUser:Password"]);

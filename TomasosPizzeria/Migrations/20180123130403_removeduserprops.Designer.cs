@@ -11,9 +11,10 @@ using TomasosPizzeria.Models;
 namespace TomasosPizzeria.Migrations
 {
     [DbContext(typeof(TomasosIdentityDBContext))]
-    partial class TomasosIdentityDBContextModelSnapshot : ModelSnapshot
+    [Migration("20180123130403_removeduserprops")]
+    partial class removeduserprops
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

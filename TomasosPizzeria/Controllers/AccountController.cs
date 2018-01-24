@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TomasosPizzeria.Models;
 using TomasosPizzeria.Models.ViewModels;
 using TomasosPizzeria.Entities;
@@ -14,13 +15,17 @@ namespace TomasosPizzeria.Controllers
     {
         private SignInManager<ApplicationUser> _signInManager;
         private UserManager<ApplicationUser> _userManager;
-        private IRestaurantRepository repository;
+        private IRestaurantRepository _restaurantrepo;
+        private IIdentityRepository _identityrepo;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IRestaurantRepository repo)
+        public AccountController(UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager, 
+            IRestaurantRepository repo, IIdentityRepository identityRepository)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            repository = repo;
+            _restaurantrepo = repo;
+            _identityrepo = identityRepository;
         }
 
         [AllowAnonymous]
@@ -51,7 +56,7 @@ namespace TomasosPizzeria.Controllers
                     ModelState.AddModelError("", "Fel användarnamn eller lösenord");
                 }
             }
-
+            
             return View(login);
         }
 
@@ -62,14 +67,14 @@ namespace TomasosPizzeria.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles="Admin")]
+        [AllowAnonymous]
         public IActionResult RegisterUser()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(RegisterUserViewModel model)
         {
@@ -77,13 +82,7 @@ namespace TomasosPizzeria.Controllers
             {
                 var newidentityuser = new ApplicationUser
                 {
-                    Name = model.FullName,
-                    Email = model.Email,
                     UserName = model.UserName,
-                    PostalCode = model.PostalCode,
-                    Adress = model.Adress,
-                    City = model.City,
-                    PhoneNumber = model.Phone,
                 };
 
                 var newuser = new Kund // För att lägga till i huvuddatabasen
@@ -98,7 +97,7 @@ namespace TomasosPizzeria.Controllers
                     Losenord = model.Password
                 };
 
-                repository.AddCustomer(newuser);
+                _restaurantrepo.AddCustomer(newuser);
 
                 var identityresult = await _userManager.CreateAsync(newidentityuser, model.Password);
 
@@ -119,17 +118,15 @@ namespace TomasosPizzeria.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> EditUser(string id)
-        {
-            return View();
-        }
-
+       
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ShowUsers()
         {
             var regularusers = await _userManager.GetUsersInRoleAsync("RegularUser");
             var premiumusers = await _userManager.GetUsersInRoleAsync("PremiumUser");
-            
+
+            ViewBag.Roles = _identityrepo.GetAllRoles().ToList().Select(item =>
+                new SelectListItem {Text = item.Name.ToString(), Value = item.Name});
 
             var users = new UsersViewModel
             {
@@ -137,19 +134,28 @@ namespace TomasosPizzeria.Controllers
                 PremiumUsers = premiumusers
             };
 
-
             return View(users);
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteUser(string username)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var identityuser = await _userManager.FindByNameAsync(username);
+            _restaurantrepo.DeleteCustomer(username);
             
-            await _userManager.DeleteAsync(user);
+            await _userManager.DeleteAsync(identityuser);
             return RedirectToAction("ShowUsers");
         }
-
+        public async Task<IActionResult> ChangeRole(string id)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var usercurrentroles = await _userManager.GetRolesAsync(user);
+            var userrole = usercurrentroles[0];
+            await _userManager.AddToRoleAsync(user, id);
+            await _userManager.RemoveFromRoleAsync(user, userrole);
+            ViewBag.Role = id;
+            return PartialView("_RolePartialView");
+        }
 
     }
 }

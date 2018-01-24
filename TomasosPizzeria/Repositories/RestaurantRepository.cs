@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using TomasosPizzeria.Entities;
 using TomasosPizzeria.Models;
+
 
 namespace TomasosPizzeria.Repositories
 {
@@ -56,15 +59,15 @@ namespace TomasosPizzeria.Repositories
             return matratter;
         }
         
-        public void SaveOrder()
+        public void SaveOrder(string username)
         {
             Kundvagn vagn = _kundvagn;
 
             Bestallning nybest = new Bestallning();
             nybest.BestallningDatum = DateTime.Now;
             nybest.Totalbelopp = vagn.ComputeTotalValue();
-            nybest.KundId = 6; // Måste ändras senare
-
+            nybest.KundId = _context.Kund.SingleOrDefault(u => u.AnvandarNamn==username).KundId;
+            
             _context.Add(nybest);
             _context.SaveChanges();
 
@@ -83,9 +86,6 @@ namespace TomasosPizzeria.Repositories
             _context.SaveChanges();
             _kundvagn.Clear();
 
-            //repository.Sa
-            //_context.Bestallning.Add(best);
-            //_context.SaveChanges();
         }
 
         public void AddCustomer(Kund user)
@@ -95,6 +95,37 @@ namespace TomasosPizzeria.Repositories
                 return;
             }
             _context.Add(user);
+            _context.SaveChanges();
+        }
+
+        public Kund GetCustomerByUserName(string username)
+        {
+            return _context.Kund.SingleOrDefault(c => c.AnvandarNamn == username);
+        }
+
+        private IQueryable<Bestallning> GetOrdersByUserName(string username)
+        {
+            var customerorders = _context.Bestallning.Where(c => c.Kund.AnvandarNamn == username);
+            return customerorders;
+        }
+        private IQueryable<BestallningMatratt> GetBestallMatrattByUserName(string username)
+        {
+            var mattrattbestallning = _context.BestallningMatratt.Where(c => c.Bestallning.Kund.AnvandarNamn == username);
+            return mattrattbestallning;
+        }
+        public void UpdateCustomer(Kund user)
+        {
+
+        }
+
+        public void DeleteCustomer(string username)
+        {
+            var user = GetCustomerByUserName(username);
+            var userorders = GetOrdersByUserName(username);
+            var matrattprodukter = GetBestallMatrattByUserName(username);
+            _context.BestallningMatratt.RemoveRange(matrattprodukter);
+            _context.Bestallning.RemoveRange(userorders);
+            _context.Kund.Remove(user);
             _context.SaveChanges();
         }
     }

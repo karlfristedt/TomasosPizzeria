@@ -13,7 +13,7 @@
 
 </head>
 <body>
-
+<div class="container">
     <div class="jumbotron">
         <div class="container text-center">
             <h1>Tomasos Online Pizza Store</h1>
@@ -40,7 +40,7 @@
                     {
                         <li>
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" style="margin: 7px" type="button" data-toggle="dropdown">
                                     @User.Identity.Name<span class="caret"></span>
                                 </button>
 
@@ -55,7 +55,7 @@
                         {
                             <li>
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" style="margin: 7px" type="button" data-toggle="dropdown">
                                         Administration Tools<span class="caret"></span>
                                     </button>
 
@@ -76,12 +76,12 @@
             </div>
         </div>
     </nav>
-
-    @RenderBody()
-
+    
+        @RenderBody()
+    
     <footer class="container-fluid text-center">
         <p>Tomasos Online Pizza Store Copyright</p>
     </footer>
-
+</div>
 </body>
 </html>

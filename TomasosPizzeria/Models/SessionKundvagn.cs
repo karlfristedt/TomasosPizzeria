@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using TomasosPizzeria.Entities;
 
+
 namespace TomasosPizzeria.Models
 {
     public class SessionKundvagn : Kundvagn
