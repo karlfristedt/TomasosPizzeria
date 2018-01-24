@@ -11,11 +11,14 @@ namespace TomasosPizzeria.Repositories
         IQueryable<Kund> GetAllCustomers();
         IQueryable<Bestallning> GetAllOrders();
         IQueryable<MatrattTyp> GetAllMatrattTyp();
+        IQueryable<Produkt> GetAllProducts();
+
 
         Bestallning GetOrderById(int id);
         Kund GetCustomerById(int id);
         Matratt GetMatrattById(int id);
         Kund GetCustomerByUserName(string username);
+       
 
         void DeleteCustomer(string username);
         void AddCustomer(Kund user);
@@ -23,6 +26,8 @@ namespace TomasosPizzeria.Repositories
         void SaveOrder(string username);
         bool ChangeOrderStatus(int id, bool status);
         void DeleteOrder(int id);
+        void UpdateMatrattProdukter(int id, IQueryable<MatrattProdukt> matrattProdukts);
+
 
     }
 }

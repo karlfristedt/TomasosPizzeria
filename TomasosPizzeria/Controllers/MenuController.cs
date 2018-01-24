@@ -45,7 +45,18 @@ namespace TomasosPizzeria.Controllers
         {
             var matratt = repository.GetMatrattById(id);
             
-            var produkter = matratt.MatrattProdukt.Where(x => x.MatrattId == id).Select(y => y.Produkt);
+            var matrattprodukter = matratt.MatrattProdukt.Where(x => x.MatrattId == id).Select(y => y.Produkt).ToList();
+
+            var test = repository.GetAllProducts().Select(v => new ProductViewModel
+            {
+               ProduktNamn = v.ProduktNamn,
+               ProduktId = v.ProduktId
+            }).ToList();
+
+            foreach (var item in test)
+            {
+                item.IsSelected = matrattprodukter.Exists(d => d.ProduktId == item.ProduktId);
+            }
 
             var model = new EditDishViewModel
             {
@@ -53,9 +64,10 @@ namespace TomasosPizzeria.Controllers
                 MatrattTyp = matratt.MatrattTypNavigation.Beskrivning,
                 Pris = matratt.Pris,
                 Beskrivning = matratt.Beskrivning,
+                MatrattId = matratt.MatrattId
             };
 
-           model.Produkter = produkter;
+           model.Produkter = test;
 
             return View(model);
         }
@@ -63,20 +75,20 @@ namespace TomasosPizzeria.Controllers
         [HttpPost]
         public IActionResult EditDish(EditDishViewModel model)
         {
-            //var matratt = repository.GetMatrattById(id);
+            if (ModelState.IsValid)
+            {
+                var matrattProdukts = model.Produkter.Where(prod => prod.IsSelected == true).Select(s => new MatrattProdukt
+                {
+                    MatrattId = model.MatrattId,
+                    ProduktId = s.ProduktId,
+                }).AsQueryable().Include(x => x.Matratt).Include(y => y.Produkt);
 
-            //var produkter = matratt.MatrattProdukt.Where(x => x.MatrattId == id).Select(y => y.Produkt);
+                repository.UpdateMatrattProdukter(model.MatrattId, matrattProdukts);
+                return RedirectToAction("ShowEditMenu");
+            }
 
-            //var model = new EditDishViewModel
-            //{
-            //    MatrattNamn = matratt.MatrattNamn,
-            //    MatrattTyp = matratt.MatrattTypNavigation.Beskrivning,
-            //    Pris = matratt.Pris,
-            //};
+            return View(model);
 
-            //model.Produkter = produkter;
-
-            return RedirectToAction("ShowEditMenu");
         }
     }
 }

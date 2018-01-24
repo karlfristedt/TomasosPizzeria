@@ -11,9 +11,10 @@ namespace TomasosPizzeria.Models.ViewModels
     {
         public EditDishViewModel()
         {
-            Produkter = new List<Produkt>();
+            Produkter = new List<ProductViewModel>();
         }
 
+        public int MatrattId { get; set; }
         [Required, MaxLength(50), Display(Name = "Namn")]
         public string MatrattNamn { get; set; }
         [Required, MaxLength(200), Display(Name = "Beskrivning")]
@@ -22,7 +23,6 @@ namespace TomasosPizzeria.Models.ViewModels
         public int Pris { get; set; }
         public string MatrattTyp { get; set; }
 
-        [Required, Display(Name = "Produkter")]
-        public IEnumerable<Produkt> Produkter { get; set; }
+        public IList<ProductViewModel> Produkter { get; set; }
     }
 }

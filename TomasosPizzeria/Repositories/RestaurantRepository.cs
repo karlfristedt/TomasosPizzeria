@@ -43,6 +43,11 @@ namespace TomasosPizzeria.Repositories
             return _context.MatrattTyp;
         }
 
+        public IQueryable<Produkt> GetAllProducts()
+        {
+            return _context.Produkt;
+        }
+
         public Bestallning GetOrderById(int id)
         {
             var order = _context.Bestallning.SingleOrDefault(o => o.BestallningId == id);
@@ -154,6 +159,15 @@ namespace TomasosPizzeria.Repositories
             var matrattbest = _context.BestallningMatratt.Where(b => b.BestallningId == id);
             _context.BestallningMatratt.RemoveRange(matrattbest);
             _context.Bestallning.Remove(order);
+            _context.SaveChanges();
+        }
+
+        public void UpdateMatrattProdukter(int id, IQueryable<MatrattProdukt> matrattProdukts)
+        {
+            var oldmattrattprodukt = _context.MatrattProdukt.Where(prod => prod.MatrattId == id);
+            _context.MatrattProdukt.RemoveRange(oldmattrattprodukt);
+            _context.SaveChanges();
+            _context.MatrattProdukt.AddRange(matrattProdukts);
             _context.SaveChanges();
         }
     }

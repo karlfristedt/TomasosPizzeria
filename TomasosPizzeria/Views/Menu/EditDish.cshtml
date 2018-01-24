@@ -1,36 +1,48 @@
 ﻿@model EditDishViewModel
 
 
-    <h2>Ändra maträtt</h2>
+<h2>Ändra maträtt</h2>
 
-    <P>@Model.MatrattTyp</P>
+<P>@Model.MatrattTyp</P>
 
 <form asp-controller="Menu" asp-action="EditDish" method="post">
 
-        <div asp-validation-summary="All" class="text-danger"></div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    
+    <input type="hidden" asp-for="@Model.MatrattId"/>
 
+    <div class="form-group">
+        <label asp-for="MatrattNamn"></label>
+        <input asp-for="MatrattNamn" class="form-control">
+        <span asp-validation-for="MatrattNamn"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Beskrivning"></label>
+        <input asp-for="Beskrivning" class="form-control">
+        <span asp-validation-for="Beskrivning"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Pris"></label>
+        <input asp-for="Pris" class="form-control">
+        <span asp-validation-for="Pris"></span>
+    </div>
+
+    @for (int i=0; i < Model.Produkter.Count(); i++)
+    {
         <div class="form-group">
-            <label asp-for="MatrattNamn"></label>
-            <input asp-for="MatrattNamn" class="form-control">
-            <span asp-validation-for="MatrattNamn"></span>
+            <label>@Model.Produkter[i].ProduktNamn</label>
+            <input asp-for="@Model.Produkter[i].IsSelected" type="checkbox" class="form-check-input">
+            <input type="hidden" asp-for="@Model.Produkter[i].ProduktId"/>
         </div>
-        <div class="form-group">
-            <label asp-for="Beskrivning"></label>
-            <input asp-for="Beskrivning" class="form-control">
-            <span asp-validation-for="Beskrivning"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Pris"></label>
-            <input asp-for="Pris" class="form-control">
-            <span asp-validation-for="Pris"></span>
-        </div>
-      
-        <button type="submit" class="btn btn-default">Spara</button>
-    </form>
+
+    }
+
+    <button type="submit" class="btn btn-default">Spara</button>
+</form>
 
 @*public string MatrattNamn { get; set; }
-public string Beskrivning { get; set; }
-public int Pris { get; set; }
-public string MatrattTyp { get; set; }
+    public string Beskrivning { get; set; }
+    public int Pris { get; set; }
+    public string MatrattTyp { get; set; }
 
-public IEnumerable<Produkt> Produkter { get; set; }*@
+    public IEnumerable<Produkt> Produkter { get; set; }*@
