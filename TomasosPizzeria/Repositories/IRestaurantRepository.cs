@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using TomasosPizzeria.Entities;
+using TomasosPizzeria.Models.ViewModels;
 
 namespace TomasosPizzeria.Repositories
 {
@@ -18,6 +19,7 @@ namespace TomasosPizzeria.Repositories
         Kund GetCustomerById(int id);
         Matratt GetMatrattById(int id);
         Kund GetCustomerByUserName(string username);
+        IQueryable<Produkt> GetProductsByMattrattId(int matrattId);
        
 
         void DeleteCustomer(string username);
@@ -26,7 +28,8 @@ namespace TomasosPizzeria.Repositories
         void SaveOrder(string username);
         bool ChangeOrderStatus(int id, bool status);
         void DeleteOrder(int id);
-        void UpdateMatrattProdukter(int id, IQueryable<MatrattProdukt> matrattProdukts);
+        void UpdateMatrattProdukter(EditDishViewModel model);
+        void UpdateMatratt(EditDishViewModel model);
 
 
     }

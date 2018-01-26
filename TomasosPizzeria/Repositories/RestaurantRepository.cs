@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TomasosPizzeria.Entities;
 using TomasosPizzeria.Models;
+using TomasosPizzeria.Models.ViewModels;
 
 
 namespace TomasosPizzeria.Repositories
@@ -77,8 +78,9 @@ namespace TomasosPizzeria.Repositories
             Bestallning nybest = new Bestallning();
             nybest.BestallningDatum = DateTime.Now;
             nybest.Totalbelopp = vagn.ComputeTotalValue();
-            nybest.KundId = _context.Kund.SingleOrDefault(u => u.AnvandarNamn==username).KundId;
+            nybest.KundId = _context.Kund.SingleOrDefault(u => u.AnvandarNamn == username).KundId;
             
+
             _context.Add(nybest);
             _context.SaveChanges();
 
@@ -162,13 +164,36 @@ namespace TomasosPizzeria.Repositories
             _context.SaveChanges();
         }
 
-        public void UpdateMatrattProdukter(int id, IQueryable<MatrattProdukt> matrattProdukts)
+        public void UpdateMatrattProdukter(EditDishViewModel model)
         {
-            var oldmattrattprodukt = _context.MatrattProdukt.Where(prod => prod.MatrattId == id);
+            var oldmattrattprodukt = _context.MatrattProdukt.Where(prod => prod.MatrattId == model.MatrattId);
+            var matrattProdukts = model.Produkter.Where(prod => prod.IsSelected == true).Select(s => new MatrattProdukt
+            {
+                MatrattId = model.MatrattId,
+                ProduktId = s.ProduktId,
+            }).AsQueryable().Include(x => x.Matratt).Include(y => y.Produkt);
+
             _context.MatrattProdukt.RemoveRange(oldmattrattprodukt);
             _context.SaveChanges();
             _context.MatrattProdukt.AddRange(matrattProdukts);
             _context.SaveChanges();
+        }
+
+        public void UpdateMatratt(EditDishViewModel model)
+        {
+            var matratt = GetMatrattById(model.MatrattId);
+            matratt.Beskrivning = model.Beskrivning;
+            matratt.MatrattNamn = model.MatrattNamn;
+            matratt.Pris = model.Pris;
+            _context.SaveChanges();
+        }
+
+
+        public IQueryable<Produkt> GetProductsByMattrattId(int matrattId)
+        {
+            var matratt = GetMatrattById(matrattId);
+            var fg = matratt.MatrattProdukt.Where(x => x.MatrattId == matrattId).Select(y => y.Produkt).AsQueryable();
+            return fg;
         }
     }
 }

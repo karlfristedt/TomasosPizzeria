@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TomasosPizzeria.Models;
 using TomasosPizzeria.Repositories;
+using TomasosPizzeria.Service;
 
 namespace TomasosPizzeria
 {
@@ -21,8 +22,7 @@ namespace TomasosPizzeria
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IRestaurantRepository, RestaurantRepository>();
-            services.AddTransient<IIdentityRepository, IdentityRepository>();
-
+            services.AddTransient<IRestaurantViewService, RestaurantViewService>();
             services.AddDbContext<TomasosDBContext>(options => options.UseSqlServer(Configuration["Data:TomasosPizzeria:ConnectionString"]));
             services.AddScoped<Kundvagn>(sp => SessionKundvagn.GetCart(sp));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

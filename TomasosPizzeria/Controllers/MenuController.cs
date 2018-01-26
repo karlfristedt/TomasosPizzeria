@@ -5,22 +5,25 @@ using TomasosPizzeria.Repositories;
 using TomasosPizzeria.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using TomasosPizzeria.Entities;
+using TomasosPizzeria.Service;
 
 namespace TomasosPizzeria.Controllers
 {
     [Authorize]
     public class MenuController : Controller
     {
-        private IRestaurantRepository repository;
+        private IRestaurantRepository _repository;
+        private IRestaurantViewService _restaurantViewService;
 
-        public MenuController(IRestaurantRepository repo)
+        public MenuController(IRestaurantRepository repository, IRestaurantViewService restaurantViewService)
         {
-            repository = repo;
+            _repository = repository;
+            _restaurantViewService = restaurantViewService;
         }
 
         public IActionResult ShowMenu()
         {
-            var kategorier = repository.GetAllMatrattTyp()
+            var kategorier = _repository.GetAllMatrattTyp()
                 .Include(m => m.Matratt)
                     .ThenInclude(m => m.MatrattProdukt)
                         .ThenInclude(m => m.Produkt)
@@ -32,7 +35,7 @@ namespace TomasosPizzeria.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ShowEditMenu()
         {
-            var kategorier = repository.GetAllMatrattTyp()
+            var kategorier = _repository.GetAllMatrattTyp()
                 .Include(m => m.Matratt)
                 .ThenInclude(m => m.MatrattProdukt)
                 .ThenInclude(m => m.Produkt)
@@ -41,49 +44,20 @@ namespace TomasosPizzeria.Controllers
             return View(kategorier);
         }
         [Authorize(Roles = "Admin")]
-        public IActionResult EditDish(int id)
+        public IActionResult EditDish(int matrattId)
         {
-            var matratt = repository.GetMatrattById(id);
-            
-            var matrattprodukter = matratt.MatrattProdukt.Where(x => x.MatrattId == id).Select(y => y.Produkt).ToList();
-
-            var test = repository.GetAllProducts().Select(v => new ProductViewModel
-            {
-               ProduktNamn = v.ProduktNamn,
-               ProduktId = v.ProduktId
-            }).ToList();
-
-            foreach (var item in test)
-            {
-                item.IsSelected = matrattprodukter.Exists(d => d.ProduktId == item.ProduktId);
-            }
-
-            var model = new EditDishViewModel
-            {
-                MatrattNamn = matratt.MatrattNamn,
-                MatrattTyp = matratt.MatrattTypNavigation.Beskrivning,
-                Pris = matratt.Pris,
-                Beskrivning = matratt.Beskrivning,
-                MatrattId = matratt.MatrattId
-            };
-
-           model.Produkter = test;
-
-            return View(model);
+            return View(_restaurantViewService.GetMatratt(matrattId));
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult EditDish(EditDishViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var matrattProdukts = model.Produkter.Where(prod => prod.IsSelected == true).Select(s => new MatrattProdukt
-                {
-                    MatrattId = model.MatrattId,
-                    ProduktId = s.ProduktId,
-                }).AsQueryable().Include(x => x.Matratt).Include(y => y.Produkt);
+                _repository.UpdateMatratt(model);
+                _repository.UpdateMatrattProdukter(model);
 
-                repository.UpdateMatrattProdukter(model.MatrattId, matrattProdukts);
                 return RedirectToAction("ShowEditMenu");
             }
 

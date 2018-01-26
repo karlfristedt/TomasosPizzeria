@@ -16,16 +16,16 @@ namespace TomasosPizzeria.Controllers
         private SignInManager<ApplicationUser> _signInManager;
         private UserManager<ApplicationUser> _userManager;
         private IRestaurantRepository _restaurantrepo;
-        private IIdentityRepository _identityrepo;
+        private RoleManager<IdentityRole> _roleManager;
 
         public AccountController(UserManager<ApplicationUser> userManager, 
-            SignInManager<ApplicationUser> signInManager, 
-            IRestaurantRepository repo, IIdentityRepository identityRepository)
+            SignInManager<ApplicationUser> signInManager,
+            IRestaurantRepository repo, RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _restaurantrepo = repo;
-            _identityrepo = identityRepository;
+            _roleManager = roleManager;
         }
 
         [AllowAnonymous]
@@ -124,7 +124,6 @@ namespace TomasosPizzeria.Controllers
         {
             
             var regularusers = await _userManager.GetUsersInRoleAsync("RegularUser");
-            
 
             var premiumusers = await _userManager.GetUsersInRoleAsync("PremiumUser");
 
@@ -142,12 +141,8 @@ namespace TomasosPizzeria.Controllers
 
             var usertest = temp.Concat(test);
 
-            
-
-            ViewBag.Roles = _identityrepo.GetAllRoles().ToList().Select(item =>
-                new SelectListItem {Text = item.Name.ToString(), Value = item.Name});
-
-           
+            ViewBag.Roles = _roleManager.Roles.ToList().Select(item =>
+                new SelectListItem { Text = item.Name.ToString(), Value = item.Name });
 
             return View(usertest);
         }
