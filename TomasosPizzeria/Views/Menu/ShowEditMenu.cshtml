@@ -2,12 +2,7 @@
 @model IEnumerable<MatrattTyp>
 
 <a asp-controller="Menu" asp-action="AddDish" class="btn btn-basic">Lägg till maträtt</a>
-<form asp-controller="Menu" asp-action="AddProduct">
-    <label>Lägg till produkt</label>
-    <input type="text"/>
-    <button type="submit">Lägg till</button>
-</form>
-<a asp-controller="Menu" asp-action="AddProduct" class="btn btn-alert">Lägg till ingrediens</a>
+
 
 @foreach (var p in Model)
 {

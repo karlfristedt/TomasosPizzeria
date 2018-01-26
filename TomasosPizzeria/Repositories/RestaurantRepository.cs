@@ -70,7 +70,13 @@ namespace TomasosPizzeria.Repositories
             
             return matratt;
         }
-        
+        public Produkt GetProduktById(int id)
+        {
+            var produkt = _context.Produkt.SingleOrDefault(m => m.ProduktId == id);
+
+            return produkt;
+        }
+
         public void SaveOrder(string username)
         {
             Kundvagn vagn = _kundvagn;
@@ -219,6 +225,13 @@ namespace TomasosPizzeria.Repositories
             }
 
             return false;
+        }
+
+        public void UpdateProduct(ProductViewModel model)
+        {
+            var product = GetProduktById(model.ProduktId);
+            product.ProduktNamn = model.ProduktNamn;
+            _context.SaveChanges();
         }
 
 

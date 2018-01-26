@@ -20,7 +20,7 @@ namespace TomasosPizzeria.Repositories
         Matratt GetMatrattById(int id);
         Kund GetCustomerByUserName(string username);
         IQueryable<Produkt> GetProductsByMattrattId(int matrattId);
-       
+        Produkt GetProduktById(int id);
 
         void DeleteCustomer(string username);
         void AddCustomer(Kund user);
@@ -31,6 +31,7 @@ namespace TomasosPizzeria.Repositories
         void UpdateMatrattProdukter(EditDishViewModel model);
         void UpdateMatratt(EditDishViewModel model);
         bool AddMatratt(AddDishViewModel model);
+        void UpdateProduct(ProductViewModel model);
 
 
     }

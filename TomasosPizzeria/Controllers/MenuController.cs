@@ -44,6 +44,49 @@ namespace TomasosPizzeria.Controllers
 
             return View(kategorier);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult ShowEditProduct()
+        {
+            var editProductView = _repository.GetAllProducts().Select(p => new ProductViewModel
+            {
+                ProduktNamn = p.ProduktNamn,
+                ProduktId = p.ProduktId
+            }).ToList();
+
+            return View(editProductView);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditProduct(int produktId)
+        {
+            var editProductView = new ProductViewModel();
+            
+            var temp = _repository.GetProduktById(produktId);
+
+            editProductView.ProduktId = temp.ProduktId;
+            editProductView.ProduktNamn = temp.ProduktNamn;
+
+            return View(editProductView);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditProduct(ProductViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _repository.UpdateProduct(model);
+                return RedirectToAction("ShowEditProduct");
+            }
+
+            return View(model);
+        }
+
+
+
+
         [Authorize(Roles = "Admin")]
         public IActionResult EditDish(int matrattId)
         {
