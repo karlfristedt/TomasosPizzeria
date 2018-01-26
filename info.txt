@@ -16,9 +16,11 @@ anpassas efter det.
 att navigera mellan olika sidor. Ni skall använda CSS för formateringar av färg, typsnitt,
 fonter och liknande. För detta måste Bootstrap användas i så stor utsträckning som möjligt
 
--För varje pizza eller
+-Att en
+användare är PremiumUser innebär att den har vissa rabatter. Köper den tre
+pizzor/maträtter eller mer får den 20% rabatt på beställningen. För varje pizza eller
 maträtt den köper får den 10 bonuspoäng. När den har 100 poäng ger det en gratis pizza
-vid en beställning. (Premium User)
+vid en beställning.
 
 -Validering måste finnas på alla fält där det behövs när värden matas in. Du måste använda
 AJAX anrop i applikationen för åtminstone en vy.

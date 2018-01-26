@@ -5,5 +5,6 @@ namespace TomasosPizzeria.Service
     public interface IRestaurantViewService
     {
         EditDishViewModel GetMatratt(int matrattId);
+        AddDishViewModel GetMatratt();
     }
 }

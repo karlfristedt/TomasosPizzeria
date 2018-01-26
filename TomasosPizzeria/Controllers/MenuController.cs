@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TomasosPizzeria.Repositories;
 using TomasosPizzeria.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,46 @@ namespace TomasosPizzeria.Controllers
 
             return View(model);
 
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddDish()
+        {
+            
+            var temp = _restaurantViewService.GetMatratt();
+            return View(temp);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddDish(AddDishViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _repository.AddMatratt(model);
+                if (result)
+                {
+                    return RedirectToAction("ShowEditMenu");
+                }
+                
+                ModelState.AddModelError("", "Det finns redan en maträtt som heter så!");
+                
+            }
+            var productViewList = _repository.GetAllProducts().Select(v => new ProductViewModel
+            {
+                ProduktNamn = v.ProduktNamn,
+                ProduktId = v.ProduktId
+            }).ToList();
+
+            model.Produkter = productViewList;
+
+            model.MatrattTyper = _repository.GetAllMatrattTyp().Select(item => new SelectListItem
+            {
+                Text = item.Beskrivning.ToString(),
+                Value = item.Beskrivning
+            }).ToList();
+            
+            return View(model);
         }
     }
 }

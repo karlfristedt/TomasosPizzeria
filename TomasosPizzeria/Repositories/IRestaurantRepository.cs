@@ -30,6 +30,7 @@ namespace TomasosPizzeria.Repositories
         void DeleteOrder(int id);
         void UpdateMatrattProdukter(EditDishViewModel model);
         void UpdateMatratt(EditDishViewModel model);
+        bool AddMatratt(AddDishViewModel model);
 
 
     }

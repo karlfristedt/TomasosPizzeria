@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TomasosPizzeria.Models.ViewModels;
 using TomasosPizzeria.Repositories;
 
@@ -46,7 +47,28 @@ namespace TomasosPizzeria.Service
 
             return matrattView;
         }
+        public AddDishViewModel GetMatratt()
+        {
+            
+            var productViewList = _repository.GetAllProducts().Select(v => new ProductViewModel
+            {
+                ProduktNamn = v.ProduktNamn,
+                ProduktId = v.ProduktId
+            }).ToList();
 
-       
+            var matrattTyps = _repository.GetAllMatrattTyp().Select(item => new SelectListItem
+            {
+                Text = item.Beskrivning.ToString(),
+                Value = item.Beskrivning
+            }).ToList();
+
+            var matrattView = new AddDishViewModel();
+
+            matrattView.MatrattTyper = matrattTyps;
+            matrattView.Produkter = productViewList;
+
+            return matrattView;
+        }
+
     }
 }

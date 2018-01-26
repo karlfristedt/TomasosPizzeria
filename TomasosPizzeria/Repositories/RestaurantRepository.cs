@@ -188,6 +188,39 @@ namespace TomasosPizzeria.Repositories
             _context.SaveChanges();
         }
 
+        public bool AddMatratt(AddDishViewModel model)
+        {
+            if (_context.Matratt.FirstOrDefault(m => m.MatrattNamn.ToUpper() == model.MatrattNamn.ToUpper()) == null)
+            {
+                var matrattTyp = _context.MatrattTyp.SingleOrDefault(t => t.Beskrivning == model.MatrattTyp);     
+
+                _context.Add(new Matratt
+                {
+                    MatrattNamn = model.MatrattNamn,
+                    Beskrivning = model.Beskrivning,
+                    Pris = model.Pris,
+                    MatrattTyp = matrattTyp.MatrattTyp1
+                });
+                _context.SaveChanges();
+
+                var matratt = _context.Matratt.OrderByDescending(id => id.MatrattId).First();
+
+                var matrattProdukts = model.Produkter.Where(prod => prod.IsSelected == true).Select(s => new MatrattProdukt
+                {
+                    MatrattId = matratt.MatrattId,
+                    ProduktId = s.ProduktId,
+                }).AsQueryable().Include(x => x.Matratt).Include(y => y.Produkt);
+
+                _context.MatrattProdukt.AddRange(matrattProdukts);
+
+                _context.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
 
         public IQueryable<Produkt> GetProductsByMattrattId(int matrattId)
         {

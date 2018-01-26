@@ -1,0 +1,45 @@
+﻿@model AddDishViewModel
+
+
+<h2>Lägg till maträtt</h2>
+
+
+<form asp-controller="Menu" asp-action="AddDish" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="MatrattNamn"></label>
+        <input asp-for="MatrattNamn" class="form-control">
+        <span asp-validation-for="MatrattNamn"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Beskrivning"></label>
+        <input asp-for="Beskrivning" class="form-control">
+        <span asp-validation-for="Beskrivning"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Pris"></label>
+        <input asp-for="Pris" class="form-control">
+        <span asp-validation-for="Pris"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MatrattTyp"></label>
+        <select asp-for="MatrattTyp" asp-items="@Model.MatrattTyper" class="form-control"></select>
+        <span asp-validation-for="MatrattTyp"></span>
+    </div>
+
+    @for (int i = 0; i < Model.Produkter.Count(); i++)
+    {
+        <div class="form-group">
+            <label>@Model.Produkter[i].ProduktNamn</label>
+            <input asp-for="@Model.Produkter[i].IsSelected" type="checkbox" class="form-check-input">
+            <input type="hidden" asp-for="@Model.Produkter[i].ProduktId" />
+        </div>
+
+    }
+
+
+    <button type="submit" class="btn btn-default">Spara</button>
+</form>
