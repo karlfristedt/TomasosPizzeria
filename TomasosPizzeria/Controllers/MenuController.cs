@@ -77,14 +77,40 @@ namespace TomasosPizzeria.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.UpdateProduct(model);
-                return RedirectToAction("ShowEditProduct");
+                var result =_repository.UpdateProduct(model);
+                if (result)
+                {
+                    return RedirectToAction("ShowEditProduct");
+                }
+                ModelState.AddModelError("", "Det finns redan en annan produkt som heter så!");
+                
             }
 
             return View(model);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddProduct()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddProduct(ProductViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _repository.AddProduct(model);
+                if (result)
+                {
+                    return RedirectToAction("ShowEditProduct");
+                }
+                ModelState.AddModelError("", "Det finns redan en annan produkt som heter så!");
+            }
+            return View(model);
+        }
 
 
         [Authorize(Roles = "Admin")]

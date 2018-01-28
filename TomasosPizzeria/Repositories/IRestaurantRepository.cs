@@ -31,7 +31,8 @@ namespace TomasosPizzeria.Repositories
         void UpdateMatrattProdukter(EditDishViewModel model);
         void UpdateMatratt(EditDishViewModel model);
         bool AddMatratt(AddDishViewModel model);
-        void UpdateProduct(ProductViewModel model);
+        bool UpdateProduct(ProductViewModel model);
+        bool AddProduct(ProductViewModel model);
 
 
     }

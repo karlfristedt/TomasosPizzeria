@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TomasosPizzeria.Entities
 {
@@ -18,6 +19,7 @@ namespace TomasosPizzeria.Entities
         public string Telefon { get; set; }
         public string AnvandarNamn { get; set; }
         public string Losenord { get; set; }
+        public string Poang { get; set; }
 
         public ICollection<Bestallning> Bestallning { get; set; }
     }

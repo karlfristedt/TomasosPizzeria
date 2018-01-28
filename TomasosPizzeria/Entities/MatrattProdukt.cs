@@ -1,4 +1,7 @@
-﻿namespace TomasosPizzeria.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace TomasosPizzeria.Entities
 {
     public partial class MatrattProdukt
     {

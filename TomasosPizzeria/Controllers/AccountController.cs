@@ -29,6 +29,9 @@ namespace TomasosPizzeria.Controllers
         }
 
         [AllowAnonymous]
+        public IActionResult AccessDenied() { return View(); }
+
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using TomasosPizzeria.Models;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TomasosPizzeria.Entities
 {

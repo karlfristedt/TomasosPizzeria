@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TomasosPizzeria.Models;
 
 namespace TomasosPizzeria.Entities
 {

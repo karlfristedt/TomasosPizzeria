@@ -187,6 +187,7 @@ namespace TomasosPizzeria.Repositories
 
         public void UpdateMatratt(EditDishViewModel model)
         {
+            
             var matratt = GetMatrattById(model.MatrattId);
             matratt.Beskrivning = model.Beskrivning;
             matratt.MatrattNamn = model.MatrattNamn;
@@ -227,11 +228,31 @@ namespace TomasosPizzeria.Repositories
             return false;
         }
 
-        public void UpdateProduct(ProductViewModel model)
+        public bool UpdateProduct(ProductViewModel model)
         {
-            var product = GetProduktById(model.ProduktId);
-            product.ProduktNamn = model.ProduktNamn;
-            _context.SaveChanges();
+            if ((_context.Produkt.FirstOrDefault(m => (m.ProduktNamn.ToUpper() == model.ProduktNamn.ToUpper()) && m.ProduktId != model.ProduktId) == null))
+            {
+                var product = GetProduktById(model.ProduktId);
+                product.ProduktNamn = model.ProduktNamn;
+                _context.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool AddProduct(ProductViewModel model)
+        {
+            if (_context.Produkt.FirstOrDefault(m => m.ProduktNamn.ToUpper() == model.ProduktNamn.ToUpper()) ==null)
+            {
+                var newproduct = new Produkt();
+                newproduct.ProduktNamn = model.ProduktNamn;
+                _context.Produkt.Add(newproduct);
+                _context.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
 
