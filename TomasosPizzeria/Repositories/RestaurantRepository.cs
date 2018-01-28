@@ -77,23 +77,47 @@ namespace TomasosPizzeria.Repositories
             return produkt;
         }
 
-        public void SaveOrder(string username)
+        public void SaveOrder(string username, bool ispremium)
         {
-            Kundvagn vagn = _kundvagn;
-
+            var kund = _context.Kund.SingleOrDefault(cust => cust.AnvandarNamn == username);
             Bestallning nybest = new Bestallning();
             nybest.BestallningDatum = DateTime.Now;
-            nybest.Totalbelopp = vagn.ComputeTotalValue();
             nybest.KundId = _context.Kund.SingleOrDefault(u => u.AnvandarNamn == username).KundId;
-            
-
+            if (ispremium)
+            {
+                kund.Poang = GetPoangByUserName(username) + _kundvagn.GetAntalRatter() * 10;
+                if (kund.Poang >= 100 && _kundvagn.GetAntalRatter() >= 3)
+                {
+                   
+                    var temp1 = _kundvagn.ComputeTotalValue() - _kundvagn.GetBilligastePizzan();
+                    var temp2 = Convert.ToDouble(temp1);
+                    temp2 = temp2 * 0.8;
+                    nybest.Totalbelopp = Convert.ToInt32(temp2);
+                    kund.Poang -= 100;
+                        
+                }
+                else if (kund.Poang >= 100)
+                {
+                    nybest.Totalbelopp = _kundvagn.ComputeTotalValue() - _kundvagn.GetBilligastePizzan();
+                    kund.Poang -= 100;
+                }
+                else if (_kundvagn.GetAntalRatter() >= 3)
+                {
+                    var temp = Convert.ToDouble(_kundvagn.ComputeTotalValue())*0.8;
+                    nybest.Totalbelopp = Convert.ToInt32(temp);
+                }
+                else nybest.Totalbelopp = _kundvagn.ComputeTotalValue();
+            }
+            else nybest.Totalbelopp = _kundvagn.ComputeTotalValue();
+                
+                    
             _context.Add(nybest);
             _context.SaveChanges();
 
             var senastebest = _context.Bestallning.OrderByDescending(id => id.BestallningId).First();
 
 
-            var bestmatrattjointables = from a in vagn.GetOrderrader()
+            var bestmatrattjointables = from a in _kundvagn.GetOrderrader()
                               select new BestallningMatratt
                               {
                                   Antal = a.Antal,
@@ -262,5 +286,13 @@ namespace TomasosPizzeria.Repositories
             var fg = matratt.MatrattProdukt.Where(x => x.MatrattId == matrattId).Select(y => y.Produkt).AsQueryable();
             return fg;
         }
+
+        public int GetPoangByUserName(string username)
+        {
+            var poang = _context.Kund.SingleOrDefault(user => user.AnvandarNamn == username).Poang;
+            return poang ?? 0;
+        }
+
     }
 }
+

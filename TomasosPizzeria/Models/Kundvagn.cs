@@ -43,6 +43,18 @@ namespace TomasosPizzeria.Models
         {
             return radlista;
         }
+        public virtual int GetAntalRatter()
+        {
+            return radlista.Sum(x=>x.Antal);
+        }
+        public virtual int GetBilligastePizzan()
+        {
+            //var price = radlista.Where(n => n.Matratt.MatrattTypNavigation.Beskrivning == "Pizza")
+            //    .OrderByDescending(pris => pris.Matratt.Pris).Last().Matratt.Pris;
+            var price = radlista.Where(n => n.Matratt.MatrattTyp == 1) // Är Pizza ID
+                .OrderByDescending(pris => pris.Matratt.Pris).Last().Matratt.Pris;
+            return price;
+        }
     }
 
 

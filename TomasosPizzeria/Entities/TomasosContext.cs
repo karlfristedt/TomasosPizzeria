@@ -91,8 +91,6 @@ namespace TomasosPizzeria.Entities
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Poang).HasColumnType("nchar(10)");
-
                 entity.Property(e => e.Postnr)
                     .IsRequired()
                     .HasMaxLength(20)

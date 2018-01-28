@@ -12,17 +12,20 @@ namespace TomasosPizzeria.Controllers
     //[Authorize(Roles = "RegularUser")]
     public class OrderController : Controller
     {
-        private IRestaurantRepository repository;
 
-        public OrderController(IRestaurantRepository repo)
+        private IRestaurantRepository _repository;
+        private Kundvagn kundvagn;
+
+        public OrderController(IRestaurantRepository repo, Kundvagn kundvagnService)
         {
-            repository = repo;
+            _repository = repo;
+            kundvagn = kundvagnService;
         }
-        
+
         [Authorize]
         public IActionResult PlaceOrder()
         {
-            repository.SaveOrder(User.Identity.Name);
+            _repository.SaveOrder(User.Identity.Name, User.IsInRole("PremiumUser"));
 
             return RedirectToAction("ShowMenu", "Menu");
         }
@@ -30,7 +33,7 @@ namespace TomasosPizzeria.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ShowOrders()
         {
-            var orders = repository.GetAllOrders()
+            var orders = _repository.GetAllOrders()
                 .Include(o => o.Kund);
 
             return View(orders);
@@ -41,7 +44,7 @@ namespace TomasosPizzeria.Controllers
         public IActionResult ChangeOrderStatus(bool status, int orderid)
         {
             
-            var result = repository.ChangeOrderStatus(orderid,status);
+            var result = _repository.ChangeOrderStatus(orderid,status);
 
          
             if (result)
@@ -62,7 +65,7 @@ namespace TomasosPizzeria.Controllers
 
         public IActionResult DeleteOrder(int id)
         {
-            repository.DeleteOrder(id);
+            _repository.DeleteOrder(id);
             return RedirectToAction("ShowOrders");
         }
 

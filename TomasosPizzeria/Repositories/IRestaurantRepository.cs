@@ -21,11 +21,12 @@ namespace TomasosPizzeria.Repositories
         Kund GetCustomerByUserName(string username);
         IQueryable<Produkt> GetProductsByMattrattId(int matrattId);
         Produkt GetProduktById(int id);
+        int GetPoangByUserName(string username);
 
         void DeleteCustomer(string username);
         void AddCustomer(Kund user);
         void UpdateCustomer(Kund user);
-        void SaveOrder(string username);
+        void SaveOrder(string username, bool ispremium);
         bool ChangeOrderStatus(int id, bool status);
         void DeleteOrder(int id);
         void UpdateMatrattProdukter(EditDishViewModel model);

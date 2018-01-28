@@ -11,5 +11,6 @@ namespace TomasosPizzeria.Models
         public int OrderradID { get; set; }
         public Matratt Matratt { get; set; }
         public int Antal { get; set; }
+        public string Typ { get; set; }
     }
 }

@@ -4,27 +4,43 @@
     <h2>Dina beställningar</h2>
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <th>Maträtt</th>
-            <th>Antal(st)</th>
-            <th>Pris(SEK)</th>
-        </tr>
+            <tr>
+                <th>Maträtt</th>
+                <th>Antal(st)</th>
+                <th>Pris(SEK)</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var p in Model.GetOrderrader())
-        {
-            <tr>
-                <td>@p.Matratt.MatrattNamn</td>
-                <td>@p.Antal</td>
-                <td>@p.Matratt.Pris</td>
-            </tr>
-        }
+            @foreach (var p in Model.GetOrderrader())
+            {
+                <tr>
+                    <td>@p.Matratt.MatrattNamn</td>
+                    <td>@p.Antal</td>
+                    <td>@p.Matratt.Pris</td>
+                </tr>
+            }
         </tbody>
     </table>
-    
+
     <div class="well">
         <p>Totalsumma: @Model.ComputeTotalValue()</p>
         <a asp-controller="Order" asp-action="PlaceOrder" class="btn btn-info" role="button">Beställ</a>
     </div>
-    
+    @if (User.IsInRole("PremiumUser"))
+    {
+        if (ViewBag.Antalratter >= 3)
+        {
+            <div class="alert alert-info">
+                <strong>Info!</strong> Du har beställt tre eller fler maträtter och får 20% på beställningen.
+            </div>
+        }
+        if (ViewBag.Antalpoang == 100)
+        {
+            <div class="alert alert-success">
+                <strong>Info!</strong> Du har uppnått @ViewBag.Antalpoang poäng och du får den billigaste pizzan gratis.
+            </div>
+        }
+
+    }
+
 </div>

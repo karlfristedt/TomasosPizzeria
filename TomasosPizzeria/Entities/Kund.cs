@@ -19,7 +19,7 @@ namespace TomasosPizzeria.Entities
         public string Telefon { get; set; }
         public string AnvandarNamn { get; set; }
         public string Losenord { get; set; }
-        public string Poang { get; set; }
+        public int? Poang { get; set; }
 
         public ICollection<Bestallning> Bestallning { get; set; }
     }
