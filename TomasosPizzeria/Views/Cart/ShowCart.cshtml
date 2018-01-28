@@ -25,6 +25,7 @@
     <div class="well">
         <p>Totalsumma: @Model.ComputeTotalValue()</p>
         <a asp-controller="Order" asp-action="PlaceOrder" class="btn btn-info" role="button">Beställ</a>
+
     </div>
     @if (User.IsInRole("PremiumUser"))
     {
