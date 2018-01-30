@@ -15,8 +15,8 @@ namespace TomasosPizzeria.Models.ViewModels
         public string FullName { get; set; }
         [Required, EmailAddress, MaxLength(50), Display(Name = "E-post")]
         public string Email { get; set; }
-        [Required, MinLength(6), MaxLength(20), DataType(DataType.Password), Display(Name = "Lösenord")]
-        public string Password { get; set; }
+        [MinLength(6), MaxLength(20), DataType(DataType.Password), Display(Name = "Nytt lösenord")]
+        public string NewPassword { get; set; }
         [MaxLength(50), Display(Name = "Gatuadress")]
         public string Adress { get; set; }
         [MaxLength(20), Display(Name = "Postnr")]
@@ -25,6 +25,9 @@ namespace TomasosPizzeria.Models.ViewModels
         public string City { get; set; }
         [MaxLength(50), Display(Name = "Telefonnummer")]
         public string Phone { get; set; }
+
+        [MinLength(6), MaxLength(20), DataType(DataType.Password), Display(Name = "Nuvarande lösenord")]
+        public string CurrentPassword { get; set; }
 
         public RoleManager<IdentityUser> Roll { get; set; }
     }

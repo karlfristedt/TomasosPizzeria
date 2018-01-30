@@ -40,6 +40,7 @@ namespace TomasosPizzeria.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel login)
         {
             if (ModelState.IsValid)
@@ -152,17 +153,71 @@ namespace TomasosPizzeria.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteUser(string username)
+        [Authorize]
+        //[ValidateAntiForgeryToken]
+        public IActionResult EditUser()
         {
-            var identityuser = await _userManager.FindByNameAsync(username);
-            _restaurantrepo.DeleteCustomer(username);
+            //var identityuser = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = _restaurantrepo.GetCustomerByUserName(User.Identity.Name);
             
-            await _userManager.DeleteAsync(identityuser);
-            return RedirectToAction("ShowUsers");
+            var userdetails = new EditUserViewModel
+            {
+                Adress = user.Gatuadress,
+                Phone = user.Telefon,
+                City = user.Postort,
+                PostalCode = user.Postnr,
+                FullName = user.Namn,
+                Email = user.Email,
+                UserName = user.AnvandarNamn
+            };
+
+            return View(userdetails);
         }
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var identityuser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+                var user = _restaurantrepo.GetCustomerByUserName(User.Identity.Name);
+
+                user.Email = model.Email;
+                user.Gatuadress = model.Adress;
+                user.Namn = model.FullName;
+                user.Postnr = model.PostalCode;
+                user.Telefon = model.Phone;
+                user.Postort = model.City;
+                _restaurantrepo.UpdateCustomer();
+
+                if (model.NewPassword != null && model.CurrentPassword != null)
+                {
+                    var result = await _userManager.ChangePasswordAsync(identityuser, model.CurrentPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return View("EditSuccess");
+                    }
+                    else
+                    {
+                        foreach (IdentityError error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                }
+                else return View("EditSuccess");
+
+
+            }
+            
+            return View(model);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeRole(string role, string username)
         {
             var user = await _userManager.FindByNameAsync(username);

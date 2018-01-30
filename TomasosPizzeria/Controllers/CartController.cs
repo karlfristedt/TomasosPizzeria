@@ -25,6 +25,7 @@ namespace TomasosPizzeria.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public RedirectToActionResult AddToCart(int id)
         {
            Matratt valdmatratt = _repository.GetAllMatratter().FirstOrDefault(p => p.MatrattId == id);

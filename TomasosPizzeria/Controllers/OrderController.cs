@@ -41,6 +41,7 @@ namespace TomasosPizzeria.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public IActionResult ChangeOrderStatus(bool status, int orderid)
         {
             

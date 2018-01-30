@@ -156,9 +156,9 @@ namespace TomasosPizzeria.Repositories
             var mattrattbestallning = _context.BestallningMatratt.Where(c => c.Bestallning.Kund.AnvandarNamn == username);
             return mattrattbestallning;
         }
-        public void UpdateCustomer(Kund user)
+        public void UpdateCustomer()
         {
-
+            _context.SaveChanges();
         }
 
         public void DeleteCustomer(string username)

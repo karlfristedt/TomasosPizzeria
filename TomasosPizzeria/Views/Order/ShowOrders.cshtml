@@ -38,7 +38,7 @@
             </td>
             <td>
                 <form asp-controller="Order" asp-action="ChangeOrderStatus" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#@order.BestallningId">
-                    <button class="btn-default" type="submit" style="float: right">Ändra</button>
+                    <button class="btn btn-default" type="submit" style="float: right">Ändra</button>
                     <input type="hidden" name="orderid" value="@order.BestallningId">
 
                     <select name="status">

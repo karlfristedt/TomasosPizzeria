@@ -73,6 +73,7 @@ namespace TomasosPizzeria.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public IActionResult EditProduct(ProductViewModel model)
         {
             if (ModelState.IsValid)
@@ -121,6 +122,7 @@ namespace TomasosPizzeria.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult EditDish(EditDishViewModel model)
         {
             if (ModelState.IsValid)
@@ -144,6 +146,7 @@ namespace TomasosPizzeria.Controllers
             return View(temp);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public IActionResult AddDish(AddDishViewModel model)
         {
